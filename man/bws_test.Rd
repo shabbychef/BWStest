@@ -6,7 +6,7 @@
 \alias{bws_test}
 \title{Perform the Baumgartner-Weiss-Schindler test.}
 \usage{
-bws_test(x, y)
+bws_test(x, y, alternative = c("two.sided", "greater", "less"))
 
 bws_stat(x, y)
 
@@ -16,6 +16,10 @@ bws_cdf(b, maxj = 5L)
 \item{x}{a vector.}
 
 \item{y}{a vector.}
+
+\item{alternative}{a character string specifying the alternative hypothesis,
+must be one of \code{"two.sided"} (default) \code{"greater"} or
+\code{"less"}.  You can specify just the initial letter. (NYI)}
 
 \item{b}{a vector of BWS test statistics.}
 
