@@ -1,0 +1,83 @@
+```{r setup,include=FALSE}
+# set the knitr options ... for everyone!
+# if you unset this, then vignette build bonks. oh, joy.
+#opts_knit$set(progress=TRUE)
+opts_knit$set(eval.after='fig.cap')
+# for a package vignette, you do want to echo.
+# opts_chunk$set(echo=FALSE,warning=FALSE,message=FALSE)
+opts_chunk$set(warning=FALSE,message=FALSE)
+#opts_chunk$set(results="asis")
+opts_chunk$set(cache=TRUE,cache.path="cache/")
+
+#opts_chunk$set(fig.path="figure/",dev=c("pdf","cairo_ps"))
+opts_chunk$set(fig.path="github_extra/figure/",dev=c("png"))
+opts_chunk$set(fig.width=7,fig.height=6,dpi=100,out.width='700px',out.height='600px')
+
+# doing this means that png files are made of figures;
+# the savings is small, and it looks like shit:
+#opts_chunk$set(fig.path="figure/",dev=c("png","pdf","cairo_ps"))
+#opts_chunk$set(fig.width=4,fig.height=4)
+# for figures? this is sweave-specific?
+#opts_knit$set(eps=TRUE)
+
+# this would be for figures:
+#opts_chunk$set(out.width='.8\\textwidth')
+# for text wrapping:
+options(width=96,digits=2)
+opts_chunk$set(size="small")
+opts_chunk$set(tidy=TRUE,tidy.opts=list(width.cutoff=50,keep.blank.line=TRUE))
+library(ggplot2)
+library(BWStest)
+library(dplyr)
+library(moments)
+library(microbenchmark)
+# chicken and egg dept:
+#[![CRAN](http://www.r-pkg.org/badges/version/BWStest)](http://cran.rstudio.com/package=BWStest) 
+#[![Downloads](http://cranlogs.r-pkg.org/badges/BWStest?color=green)](http://www.r-pkg.org/pkg/BWStest)
+#[![Total](http://cranlogs.r-pkg.org/badges/grand-total/BWStest?color=green)](http://www.r-pkg.org/pkg/BWStest)
+```
+
+# BWStest
+
+[![Build Status](https://travis-ci.org/shabbychef/BWStest.png)](https://travis-ci.org/shabbychef/BWStest)
+[![codecov.io](http://codecov.io/github/shabbychef/BWStest/coverage.svg?branch=master)](http://codecov.io/github/shabbychef/BWStest?branch=master)
+![RCpp](https://img.shields.io/badge/RCpp-inside-blue.svg)
+
+Performs the [Baumgartner-Weiß-Schindler 2-sample test](http://doai.io/10.2307/2533862) of equal probability
+distributions. Will eventually support the modified one-sided tests.
+
+-- Steven E. Pav, shabbychef@gmail.com
+
+## Installation
+
+This package can be installed 
+from github:
+
+```{r install,eval=FALSE,echo=TRUE}
+# get snapshot from github (may be buggy)
+if (require(devtools)) {
+	install_github('shabbychef/BWStest')
+}
+```
+
+# Basic Usage
+
+```{r babysteps,eval=TRUE,echo=TRUE}
+require(BWStest)
+x <- rnorm(100)
+y <- rnorm(100)
+bval <- bws_stat(x,y)
+
+# now compute a bunch under the null:
+bvals <- replicate(5000,bws_stat(rnorm(100),rnorm(100)))
+# compute the approximate p-values under the null:
+pvals <- bws_cdf(bvals)
+
+require(ggplot2)
+ph <- ggplot(data.frame(pv=pvals),aes(sample=pv)) + 
+  stat_qq(distribution=stats::qunif)
+print(ph)
+```
+
+Looks good to me!
+

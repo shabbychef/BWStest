@@ -1,0 +1,19 @@
+# for testing, ignore these
+
+# dev stuff
+.tags
+.R_tags
+.*.swp
+.*.swo
+
+*.so
+*.o
+
+BWStest.Rcheck
+BWStest*tar.gz
+BWStest*crancheck
+.docker_img
+cache
+.drat_*
+
+.check_tmp
