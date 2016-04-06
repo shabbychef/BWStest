@@ -41,10 +41,13 @@ test_that("runs without error",{#FOLDUP
 	y <- rnorm(100)
 
 	b <- bws_stat(x,y)
+	b <- bws_stat(x,rnorm(1))
+	b <- bws_stat(rnorm(1),y)
 
 	bvals <- replicate(500,bws_stat(rnorm(50),rnorm(40)))
 	pvals <- bws_cdf(bvals)
 
+	htest <- bws_test(x,y)
 
 	# sentinel
 	expect_true(TRUE)
