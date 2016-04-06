@@ -135,6 +135,10 @@ IntegerVector zip_index_lstar(T sortx, T refy, const int lo, const int hi) {
 	return retv;
 }
 
+//2FIX: this is a stupid hacky way to compute this.
+//smarter would be to modify zip_index_lstar to 
+//do the addition for you?
+//ah, but ties, right.
 // given sorted x and sorted y, for each element in y
 // find the number of elements in union(x,y) less than
 // or equal to it. that is
@@ -244,6 +248,7 @@ NumericVector bws_cdf(NumericVector b,int maxj=5) {
 	double interm;
 	double fjp1;
 	// Chebyshev quadrature of the first kind...
+	// c.f. https://en.wikipedia.org/wiki/Chebyshev%E2%80%93Gauss_quadrature
 	int bign=101;
 	IntegerVector iseq = seq_len(bign);
 	NumericVector nodes_plus_1 = 1.0 + cos(M_PI * (2.0 * as<NumericVector>(iseq) - 1.0) / (2*bign));
@@ -269,7 +274,5 @@ NumericVector bws_cdf(NumericVector b,int maxj=5) {
 	return retv;
 }
 
-
-
 //for vim modeline: (do not edit)
-// vim:ts=2:sw=2:tw=79:fdm=marker:fmr=FOLDUP,UNFOLD:cms=//%s:tags=.c_tags;:syn=cpp:ft=cpp:mps+=<\:>:ai:si:cin:nu:fo=croql:cino=p0t0c5(0:
+// vim:ts=2:sw=2:tw=129:fdm=marker:fmr=FOLDUP,UNFOLD:cms=//%s:tags=.c_tags;:syn=cpp:ft=cpp:mps+=<\:>:ai:si:cin:nu:fo=croql:cino=p0t0c5(0:

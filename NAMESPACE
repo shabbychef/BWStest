@@ -2,9 +2,8 @@
 
 export(bws_cdf)
 export(bws_stat)
+export(bws_test)
 exportPattern("^[[:alpha:]]+")
 import(Rcpp)
-import(methods)
 importFrom(Rcpp,evalCpp)
-importFrom(methods,new)
 useDynLib(BWStest)

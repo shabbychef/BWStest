@@ -37,10 +37,9 @@
 #' @docType package
 #' @title Baumgartner Weiss Schindler test of equal distributions.
 #' @keywords package
-#' @import Rcpp methods
+#' @import Rcpp 
 #' @useDynLib BWStest
 #' @importFrom Rcpp evalCpp
-#' @importFrom methods new 
 #' @exportPattern "^[[:alpha:]]+"
 #'
 NULL

@@ -10,7 +10,7 @@ Authors@R: c(person(c("Steven", "E."), "Pav", role=c("aut","cre"),
 Version: VERSION()
 Date: DATE()
 License: LGPL-3
-Title: Baumgartner Weiss Schindler test of equal distributions.
+Title: Baumgartner Weiss Schindler Test of Equal Distributions
 BugReports: https://github.com/shabbychef/PKG_NAME()/issues
 Description: Performs the 'Baumgartner-Weiss-Schindler' two-sample test of equal
    probability distributions.
