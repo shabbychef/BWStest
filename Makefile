@@ -138,6 +138,7 @@ really_tag : ## actually github tag
 	git push --tags
 
 $(DRAT_SENTINEL) : $(PKG_TGZ)
+	@cd ~/github/drat && git pull origin gh-pages && cd -
 	R --slave -e "drat:::insertPackage('$<',repodir='~/github/drat',commit=TRUE)"
 
 dratit : $(DRAT_SENTINEL) ## insert into my drat store

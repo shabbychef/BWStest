@@ -14,10 +14,16 @@ distributions.
 ## Installation
 
 This package can be installed 
+via [drat](https://github.com/eddelbuettel/drat "drat"), or
 from github:
 
 
 ```r
+# via drat:
+if (require(drat)) {
+    drat:::add("shabbychef")
+    install.packages("BWStest")
+}
 # get snapshot from github (may be buggy)
 if (require(devtools)) {
     install_github("shabbychef/BWStest")
@@ -32,10 +38,10 @@ supports the classical Baumgartner-Weiß-Schindler test, returning a `htest` obj
 
 ```r
 require(BWStest)
-set.seed(123)
+set.seed(12345)
 # under the null:
-x <- rnorm(100)
-y <- rnorm(100)
+x <- rnorm(200)
+y <- rnorm(200)
 bval <- bws_test(x, y)
 show(bval)
 ```
@@ -45,12 +51,13 @@ show(bval)
 ## 	two-sample BWS test
 ## 
 ## data:  x vs. y
-## b = 2, p-value = 0.1
+## b = 1, p-value = 0.2
+## alternative hypothesis: two.sided
 ```
 
 ```r
 # under the alternative:
-z <- rnorm(100, mean = 1)
+z <- rnorm(200, mean = 1)
 bval <- bws_test(x, z)
 show(bval)
 ```
@@ -61,6 +68,7 @@ show(bval)
 ## 
 ## data:  x vs. z
 ## b = 30, p-value <2e-16
+## alternative hypothesis: two.sided
 ```
 
 ## Checking the null
