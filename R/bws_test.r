@@ -5,7 +5,7 @@
 # Author: Steven E. Pav <steven@corecast.io>
 # Comments: Steven E. Pav
 
-#' @rdname bws_test
+# getAnywhere('print.htest') 
 
 #' @title Perform the Baumgartner-Weiss-Schindler hypothesis test.
 #'
@@ -37,6 +37,7 @@
 #' y <- rnorm(100,mean=0.5)
 #' hval <- bws_test(x,y)
 #'
+#' @rdname bws_test
 #' @export
 bws_test <- function(x,y)
 {
@@ -51,6 +52,7 @@ bws_test <- function(x,y)
 	} else if (min(nx,ny) <= 10) {
 		warning('Small sample size may cause loss of nominal coverage.')
 	}
+	alternative <- 'two.sided'
 
 	bval <- bws_stat(x,y)
 	names(bval) <- "b"
@@ -58,7 +60,9 @@ bws_test <- function(x,y)
 
 	retval <- list(statistic = bval, 
 								 p.value = pval,
-								 method = method, data.name = dname)
+								 alternative = alternative,
+								 method = method, 
+								 data.name = dname)
 	class(retval) <- "htest"
 	return(retval)
 }
