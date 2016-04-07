@@ -72,6 +72,58 @@ test_that("bws_stat monotonic transform invariant",{#FOLDUP
 	# sentinel
 	expect_true(TRUE)
 })#UNFOLD
+test_that("bws_cdf matches table I",{#FOLDUP
+	bvals <- c(1.933,2.493,3.076,3.880,4.500,5.990)
+	tab1v <- c(0.9,0.95,0.975,0.990,0.995,0.999)
+	pvals <- bws_cdf(bvals,lower_tail=TRUE)
+	show(data.frame(B=bvals,BWS_psi=tab1v,our_psi=pvals))
+	expect_equal(tab1v,pvals,tolerance=1e-4) 
+
+	# sentinel
+	expect_true(TRUE)
+})#UNFOLD
+test_that("bws_test under alternative",{#FOLDUP
+	set.char.seed("ee76160c-844e-4b3d-9cb7-193d2621355c")
+	x <- rnorm(100)
+	y <- rnorm(100,mean=3)
+	ht <- bws_test(x,y)
+	expect_lt(ht$p.value,1e-8)
+
+	# sentinel
+	expect_true(TRUE)
+})#UNFOLD
+test_that("bws_cdf sane",{#FOLDUP
+	bvals <- exp(seq(log(0.1),log(100),length.out=201))
+	pvals <- bws_cdf(bvals,lower_tail=TRUE)
+	expect_true(all(pvals >= 0))
+	expect_true(all(pvals <= 1))
+	pvals <- bws_cdf(bvals,lower_tail=FALSE)
+	expect_true(all(pvals >= 0))
+	expect_true(all(pvals <= 1))
+
+	# sentinel
+	expect_true(TRUE)
+})#UNFOLD
+test_that("bws_cdf sane",{#FOLDUP
+	is.sorted <- function(x) { all(diff(x) >= 0) }
+	bvals <- exp(seq(log(0.1),log(4),length.out=201))
+	pvals <- bws_cdf(bvals,lower_tail=TRUE)
+	expect_true(is.sorted(pvals))
+	pvals <- bws_cdf(bvals,lower_tail=FALSE)
+	expect_true(is.sorted(rev(pvals)))
+
+	# sentinel
+	expect_true(TRUE)
+})#UNFOLD
+test_that("bws_cdf deterministic",{#FOLDUP
+	bvals <- exp(seq(log(0.1),log(100),length.out=201))
+	pv1 <- bws_cdf(bvals)
+	pv2 <- bws_cdf(bvals)
+	expect_equal(pv1,pv2)
+
+	# sentinel
+	expect_true(TRUE)
+})#UNFOLD
 
 # 2FIX: check the effects of NA
 #UNFOLD

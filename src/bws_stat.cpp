@@ -196,17 +196,17 @@ stopifnot(all(unlist(lapply(sort(x),function(anx) { sum(c(x,y) <= anx) })) == fo
 //' @seealso bws_cdf
 //' @examples
 //'
-//'  set.seed(1234)
-//'  x <- runif(1000)
-//'  y <- runif(100)
-//'  bval <- bws_stat(x,y)
-//'  # check a monotonic transform:
-//'  ftrans <- function(x) { log(1 + x) }
-//'  bval2 <- bws_stat(ftrans(x),ftrans(y))
-//'  stopifnot(all.equal(bval,bval2))
-//'  # check commutivity
-//'  bval3 <- bws_stat(y,x)
-//'  stopifnot(all.equal(bval,bval3))
+//' set.seed(1234)
+//' x <- runif(1000)
+//' y <- runif(100)
+//' bval <- bws_stat(x,y)
+//' # check a monotonic transform:
+//' ftrans <- function(x) { log(1 + x) }
+//' bval2 <- bws_stat(ftrans(x),ftrans(y))
+//' stopifnot(all.equal(bval,bval2))
+//' # check commutivity
+//' bval3 <- bws_stat(y,x)
+//' stopifnot(all.equal(bval,bval3))
 //'
 //' @template etc
 //' @template ref-bws
@@ -319,6 +319,9 @@ NumericVector bws_cdf(NumericVector b,int maxj=5,bool lower_tail=true) {
 			summus = prod1 * exp(-part2 * pow(fjp1,2));
 			retv[iii] += interm * sum(summus * weights);
 		}
+		// probably a sugar way to do this:
+		retv[iii] = MAX(retv[iii],0.0);
+		retv[iii] = MIN(retv[iii],1.0);
 	}
 	if (! lower_tail) {
 		retv = 1.0 - retv;
