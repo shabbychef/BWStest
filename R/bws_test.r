@@ -15,15 +15,14 @@
 #'
 #' @param x a vector of the first sample.
 #' @param y a vector of the first sample.
-#' @param alternative a character string specifying the alternative hypothesis,
-#'       must be one of \code{"two.sided"} (default) \code{"greater"} or
-#'       \code{"less"}.  You can specify just the initial letter. (NYI)
 #' @return Object of class \code{htest}, a list of the test statistic,
 #' the p-value, and the \code{method} noted.
 #' @keywords htest
 #' @seealso \code{\link{bws_test}}, \code{\link{bws_stat}} 
 #' @template etc
 #' @template ref-bws
+#' @note Eventually this will support the one-sided tests of
+#' Neuhauser and Murakami.
 #' @examples 
 #'
 #' # under the null
@@ -39,10 +38,19 @@
 #' hval <- bws_test(x,y)
 #'
 #' @export
-bws_test <- function(x,y,alternative=c("two.sided","greater","less")) 
+bws_test <- function(x,y)
 {
 	dname <- paste(deparse(substitute(x)),'vs.',deparse(substitute(y)))
 	method <- "two-sample BWS test"
+	x <- x[!is.na(x)]
+	y <- y[!is.na(y)]
+	nx <- length(x)
+	ny <- length(y)
+	if (max(nx,ny) <= 8) {
+		warning('A permutation test would likely make more sense.')
+	} else if (min(nx,ny) <= 10) {
+		warning('Small sample size may cause loss of nominal coverage.')
+	}
 
 	bval <- bws_stat(x,y)
 	names(bval) <- "b"
@@ -54,6 +62,7 @@ bws_test <- function(x,y,alternative=c("two.sided","greater","less"))
 	class(retval) <- "htest"
 	return(retval)
 }
+#bws_test <- function(x,y,alternative=c("two.sided","greater","less")) 
 
 #for vim modeline: (do not edit)
 # vim:fdm=marker:fmr=FOLDUP,UNFOLD:cms=#%s:syn=r:ft=r

@@ -10,10 +10,17 @@ News for package 'BWStest'
 \newcommand{\cranBWStest}{\CRANpkg{BWStest}}
 \newcommand{\BWStest}{\href{https://github.com/shabbychef/BWStest}}
 }
-\section{\BWStest{} Initial Version 0.1.0 (2016-04-06) }{
+\section{\BWStest{} Initial Version 0.1.0 (2016-04-07) }{
 
 \itemize{
-\item start work
+\item First CRAN release.
+}
+}
+
+\section{\BWStest{} Initial Version 0.0.0 (2016-04-06) }{
+
+\itemize{
+\item Start work
 }
 }
 

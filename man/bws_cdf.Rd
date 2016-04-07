@@ -14,13 +14,13 @@ of the CDF via equation (2.5). Baumgartner \emph{et. al.} claim that a
 value of 3 is sufficient.}
 
 \item{lower_tail}{boolean, when \code{TRUE} returns \eqn{\Psi}{Psi}, otherwise
-compute the upper tail, which is more useful for hypothesis tests.}
+compute the upper tail, \eqn{1-\Psi}{1 - Psi}, which is more useful for hypothesis tests.}
 }
 \value{
-a vector of the CDF of \eqn{b}, \eqn{\Psi(b)}{Psi(b)}.
+A vector of the CDF of \eqn{b}, \eqn{\Psi(b)}{Psi(b)}.
 }
 \description{
-Computes the Baumgartner-Weiss-Schindler test statistic under the
+Computes the CDF of the Baumgartner-Weiss-Schindler test statistic under the
 null hypothesis of equal distributions.
 }
 \details{
@@ -28,6 +28,16 @@ Given value \eqn{b}, computes the CDF of the BWS statistic under
 the null, denoted as \eqn{\Psi(b)}{Psi(b)} by 
 Baumgartner \emph{et al.}  The CDF is computed from 
 equation (2.5) via numerical quadrature.
+
+The expression for the CDF contains the integral
+\deqn{\int_0^1 \frac{1}{\sqrt{r^3 (1-r)}} \mathrm{exp}\left(\frac{rb}{8} - \frac{\pi^2 (4j+1)^2}{8rb}\right) \mathrm{dr}}
+By making the change of variables \eqn{x = 2r - 1}, this can
+be re-expressed as an integral of the form
+\deqn{\int_{-1}^1 \frac{1}{\sqrt{1-x^2}} f(x) \mathrm{dx},}
+for some function \eqn{f(x)} involving \eqn{b} and \eqn{j}. 
+This integral can be approximated
+via Gaussian quadrature using Chebyshev nodes (of the first kind), which
+is the approach we take here.
 }
 \examples{
 
@@ -56,6 +66,6 @@ Biometrics, Vol. 54, No. 3 (Sep., 1998), pp. 1129-1135.
 \url{http://doai.io/10.2307/2533862}
 }
 \seealso{
-bws_stat
+\code{\link{bws_stat}}, \code{\link{bws_test}}
 }
 

@@ -7,7 +7,7 @@
 ![RCpp](https://img.shields.io/badge/RCpp-inside-blue.svg)
 
 Performs the [Baumgartner-Weiß-Schindler 2-sample test](http://doai.io/10.2307/2533862) of equal probability
-distributions. Will eventually support the modified one-sided tests.
+distributions. 
 
 -- Steven E. Pav, shabbychef@gmail.com
 
@@ -47,4 +47,10 @@ print(ph)
 <img src="github_extra/figure/babysteps-1.png" title="plot of chunk babysteps" alt="plot of chunk babysteps" width="700px" height="600px" />
 
 Looks good to me!
+
+## Future work
+
+Eventually the package will support the modified tests proposed by 
+[Neuhauser](http://doai.io/10.1007/BF02762032) and 
+[Murakami](http://doai.io/10.1080/00949655.2010.551516).
 

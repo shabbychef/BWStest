@@ -178,11 +178,16 @@ stopifnot(all(unlist(lapply(sort(x),function(anx) { sum(c(x,y) <= anx) })) == fo
 //' @details
 //'
 //' Given vectors \eqn{X} and \eqn{Y}, computes \eqn{B_X} and \eqn{B_Y} as
-//' described by Baumgartner \emph{et al.}, returning their average.
+//' described by Baumgartner \emph{et al.}, returning their average, \eqn{B}.
 //' The test statistic approximates the variance-weighted square norm of the
 //' difference in CDFs of the two distributions. For sufficiently large sample
-//' sizes (more than 20, say), the test statistic approaches the asymptotic
-//' value computed in another function under the null.
+//' sizes (more than 20, say), under the null the test statistic approaches the asymptotic
+//' value computed in \code{\link{bws_cdf}}.
+//'
+//' The test value is an approximation of
+//' \deqn{\tilde{B} = \frac{mn}{m+n} \int_0^1 \frac{1}{z(1-z)} \left(F_X(z) - F_Y(z)\right)^2 \mathrm{dz},}
+//' where \eqn{m} (\eqn{n}) is the number of elements in \eqn{X} (\eqn{Y}), and
+//' \eqn{F_X(z)}{F_X(z)} (\eqn{F_Y(z)}{F_Y(z)}) is the CDF of \eqn{X} (\eqn{Y}).
 //'
 //' The test statistic is based only on the ranks of the input. If the same
 //' monotonic transform is applied to both vectors, the result should be unchanged.
@@ -192,8 +197,8 @@ stopifnot(all(unlist(lapply(sort(x),function(anx) { sum(c(x,y) <= anx) })) == fo
 //' @param x a vector.
 //' @param y a vector.
 //'
-//' @return return the BWS test statistic, \eqn{B}.
-//' @seealso bws_cdf
+//' @return The BWS test statistic, \eqn{B}.
+//' @seealso \code{\link{bws_cdf}}, \code{\link{bws_test}}
 //' @examples
 //'
 //' set.seed(1234)
@@ -248,7 +253,7 @@ double gamrat(double j) {
 //'
 //' @description
 //'
-//' Computes the Baumgartner-Weiss-Schindler test statistic under the
+//' Computes the CDF of the Baumgartner-Weiss-Schindler test statistic under the
 //' null hypothesis of equal distributions.
 //'
 //' @details
@@ -258,15 +263,25 @@ double gamrat(double j) {
 //' Baumgartner \emph{et al.}  The CDF is computed from 
 //' equation (2.5) via numerical quadrature.
 //'
+//' The expression for the CDF contains the integral
+//' \deqn{\int_0^1 \frac{1}{\sqrt{r^3 (1-r)}} \mathrm{exp}\left(\frac{rb}{8} - \frac{\pi^2 (4j+1)^2}{8rb}\right) \mathrm{dr}}
+//' By making the change of variables \eqn{x = 2r - 1}, this can
+//' be re-expressed as an integral of the form
+//' \deqn{\int_{-1}^1 \frac{1}{\sqrt{1-x^2}} f(x) \mathrm{dx},}
+//' for some function \eqn{f(x)} involving \eqn{b} and \eqn{j}. 
+//' This integral can be approximated
+//' via Gaussian quadrature using Chebyshev nodes (of the first kind), which
+//' is the approach we take here.
+//'
 //' @param b a vector of BWS test statistics.
 //' @param maxj the maximum value of j to take in the approximate computation
 //' of the CDF via equation (2.5). Baumgartner \emph{et. al.} claim that a
 //' value of 3 is sufficient.
 //' @param lower_tail boolean, when \code{TRUE} returns \eqn{\Psi}{Psi}, otherwise
-//' compute the upper tail, which is more useful for hypothesis tests.
+//' compute the upper tail, \eqn{1-\Psi}{1 - Psi}, which is more useful for hypothesis tests.
 //'
-//' @return a vector of the CDF of \eqn{b}, \eqn{\Psi(b)}{Psi(b)}.
-//' @seealso bws_stat
+//' @return A vector of the CDF of \eqn{b}, \eqn{\Psi(b)}{Psi(b)}.
+//' @seealso \code{\link{bws_stat}}, \code{\link{bws_test}}
 //' @examples
 //'
 //' # do it 500 times

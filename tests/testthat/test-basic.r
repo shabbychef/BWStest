@@ -49,6 +49,9 @@ test_that("runs without error",{#FOLDUP
 
 	htest <- bws_test(x,y)
 
+	expect_warning(bws_test(rnorm(5),rnorm(5)))
+	expect_warning(bws_test(rnorm(50),rnorm(5)))
+
 	# sentinel
 	expect_true(TRUE)
 })#UNFOLD

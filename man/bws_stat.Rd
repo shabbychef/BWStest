@@ -12,18 +12,23 @@ bws_stat(x, y)
 \item{y}{a vector.}
 }
 \value{
-return the BWS test statistic, \eqn{B}.
+The BWS test statistic, \eqn{B}.
 }
 \description{
 Compute the Baumgartner-Weiss-Schindler test statistic.
 }
 \details{
 Given vectors \eqn{X} and \eqn{Y}, computes \eqn{B_X} and \eqn{B_Y} as
-described by Baumgartner \emph{et al.}, returning their average.
+described by Baumgartner \emph{et al.}, returning their average, \eqn{B}.
 The test statistic approximates the variance-weighted square norm of the
 difference in CDFs of the two distributions. For sufficiently large sample
-sizes (more than 20, say), the test statistic approaches the asymptotic
-value computed in another function under the null.
+sizes (more than 20, say), under the null the test statistic approaches the asymptotic
+value computed in \code{\link{bws_cdf}}.
+
+The test value is an approximation of
+\deqn{\tilde{B} = \frac{mn}{m+n} \int_0^1 \frac{1}{z(1-z)} \left(F_X(z) - F_Y(z)\right)^2 \mathrm{dz},}
+where \eqn{m} (\eqn{n}) is the number of elements in \eqn{X} (\eqn{Y}), and
+\eqn{F_X(z)}{F_X(z)} (\eqn{F_Y(z)}{F_Y(z)}) is the CDF of \eqn{X} (\eqn{Y}).
 
 The test statistic is based only on the ranks of the input. If the same
 monotonic transform is applied to both vectors, the result should be unchanged.
@@ -54,6 +59,6 @@ Biometrics, Vol. 54, No. 3 (Sep., 1998), pp. 1129-1135.
 \url{http://doai.io/10.2307/2533862}
 }
 \seealso{
-bws_cdf
+\code{\link{bws_cdf}}, \code{\link{bws_test}}
 }
 
