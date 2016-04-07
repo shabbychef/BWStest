@@ -20,14 +20,14 @@
  
   see also: 
 
-	+ W. Baumgartner, P. Weiss, H. Schindler, 'A Nonparametric Test for the General Two-Sample Problem', 
-    Biometrics, Vol. 54, No. 3 (Sep., 1998), pp. 1129-1135, http://doai.io/10.2307/2533862
-	+ M. Neuhauser, 'Exact Tests Based on the Baumgartner-Weiss-Schindler Statistic--A Survey', 
-	  Statistical Papers, Vol 46 (2005), pp. 1-30. http://doai.io/10.1007/BF02762032
-	+ M. Neuhauser, 'One-Sided Two-Sample and Trend Tests Based on a Modified Baumgartner-Weiss-Schindler 
-	  Statistic', J. Nonparametric Statistics, Vol 13 (2001) pp 729-739. http://doai.io/10.1080/10485250108832874
-	+ H. Murakami, 'K-Sample Rank Test Based on Modified Baumgartner Statistic and its Power Comparison', 
-	  J. Jpn. Comp. Statist. Vol 19 (2006), pp. 1-13. http://doai.io/10.1080/00949655.2010.551516
+  + W. Baumgartner, P. Weiss, H. Schindler, 'A Nonparametric Test for the General Two-Sample Problem', 
+    Biometrics, Vol. 54, No. 3 (Sep., 1998), pp. 1129-1135. http://doai.io/10.2307/2533862
+  + M. Neuhauser, 'Exact Tests Based on the Baumgartner-Weiss-Schindler Statistic--A Survey', 
+    Statistical Papers, Vol 46 (2005), pp. 1-30. http://doai.io/10.1007/BF02762032
+  + M. Neuhauser, 'One-Sided Two-Sample and Trend Tests Based on a Modified Baumgartner-Weiss-Schindler 
+    Statistic', J. Nonparametric Statistics, Vol 13 (2001) pp 729-739. http://doai.io/10.1080/10485250108832874
+  + H. Murakami, 'K-Sample Rank Test Based on Modified Baumgartner Statistic and its Power Comparison', 
+    J. Jpn. Comp. Statist. Vol 19 (2006), pp. 1-13. http://doai.io/10.1080/00949655.2010.551516
 
 
   Created: 2016.04.06
@@ -269,14 +269,20 @@ double gamrat(double j) {
 //' @seealso bws_stat
 //' @examples
 //'
-//'  # do it 500 times
-//'  set.seed(123)
-//'  bvals <- replicate(500, bws_stat(rnorm(50),rnorm(50)))
-//'  pvals <- bws_cdf(bvals)
-//'  # these should be uniform!
-//'  \dontrun{ 
-//'    plot(ecdf(pvals)) 
-//'  }
+//' # do it 500 times
+//' set.seed(123)
+//' bvals <- replicate(500, bws_stat(rnorm(50),rnorm(50)))
+//' pvals <- bws_cdf(bvals)
+//' # these should be uniform!
+//' \dontrun{ 
+//'   plot(ecdf(pvals)) 
+//' }
+//' 
+//' # compare to Table 1 of Baumgartner et al.
+//' bvals <- c(1.933,2.493,3.076,3.880,4.500,5.990)
+//' tab1v <- c(0.9,0.95,0.975,0.990,0.995,0.999)
+//' pvals <- bws_cdf(bvals,lower_tail=TRUE)
+//' show(data.frame(B=bvals,BWS_psi=tab1v,our_psi=pvals))
 //'
 //' @template etc
 //' @template ref-bws
