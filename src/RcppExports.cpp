@@ -18,14 +18,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // bws_cdf
-NumericVector bws_cdf(NumericVector b, int maxj);
-RcppExport SEXP BWStest_bws_cdf(SEXP bSEXP, SEXP maxjSEXP) {
+NumericVector bws_cdf(NumericVector b, int maxj, bool lower_tail);
+RcppExport SEXP BWStest_bws_cdf(SEXP bSEXP, SEXP maxjSEXP, SEXP lower_tailSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< NumericVector >::type b(bSEXP);
     Rcpp::traits::input_parameter< int >::type maxj(maxjSEXP);
-    __result = Rcpp::wrap(bws_cdf(b, maxj));
+    Rcpp::traits::input_parameter< bool >::type lower_tail(lower_tailSEXP);
+    __result = Rcpp::wrap(bws_cdf(b, maxj, lower_tail));
     return __result;
 END_RCPP
 }

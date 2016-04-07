@@ -2,25 +2,78 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @title
-#' Perform the Baumgartner-Weiss-Schindler test.
+#' Compute the test statistic of the Baumgartner-Weiss-Schindler test.
 #'
 #' @description
 #'
-#' Compute the Baumgartner-Weiss-Schindler test statistic, the CDF under the
-#' null, or perform the hypothesis test.
+#' Compute the Baumgartner-Weiss-Schindler test statistic.
+#'
+#' @details
+#'
+#' Given vectors \eqn{X} and \eqn{Y}, computes \eqn{B_X} and \eqn{B_Y} as
+#' described by Baumgartner \emph{et al.}, returning their average.
+#' The test statistic approximates the variance-weighted square norm of the
+#' difference in CDFs of the two distributions. For sufficiently large sample
+#' sizes (more than 20, say), the test statistic approaches the asymptotic
+#' value computed in another function under the null.
+#'
+#' The test statistic is based only on the ranks of the input. If the same
+#' monotonic transform is applied to both vectors, the result should be unchanged.
+#' Moreover, the test is inherently two-sided, so swapping \eqn{X} and \eqn{Y}
+#' should also leave the test statistic unchanged.
 #'
 #' @param x a vector.
 #' @param y a vector.
 #'
-#' @return return the BWS test statistic, \eqn{b}, or the CDF of \eqn{b} under
-#' the null.
-#'
+#' @return return the BWS test statistic, \eqn{B}.
+#' @seealso bws_cdf
 #' @examples
 #'
 #'  set.seed(1234)
-#'  x <- rnorm(1000)
-#'  y <- rnorm(100)
+#'  x <- runif(1000)
+#'  y <- runif(100)
 #'  bval <- bws_stat(x,y)
+#'  # check a monotonic transform:
+#'  ftrans <- function(x) { log(1 + x) }
+#'  bval2 <- bws_stat(ftrans(x),ftrans(y))
+#'  stopifnot(all.equal(bval,bval2))
+#'  # check commutivity
+#'  bval3 <- bws_stat(y,x)
+#'  stopifnot(all.equal(bval,bval3))
+#'
+#' @template etc
+#' @template ref-bws
+#' @rdname bws_stat
+#' @export
+bws_stat <- function(x, y) {
+    .Call('BWStest_bws_stat', PACKAGE = 'BWStest', x, y)
+}
+
+#' @title
+#' CDF of the Baumgartner-Weiss-Schindler test under the null.
+#'
+#' @description
+#'
+#' Computes the Baumgartner-Weiss-Schindler test statistic under the
+#' null hypothesis of equal distributions.
+#'
+#' @details
+#'
+#' Given value \eqn{b}, computes the CDF of the BWS statistic under
+#' the null, denoted as \eqn{\Psi(b)}{Psi(b)} by 
+#' Baumgartner \emph{et al.}  The CDF is computed from 
+#' equation (2.5) via numerical quadrature.
+#'
+#' @param b a vector of BWS test statistics.
+#' @param maxj the maximum value of j to take in the approximate computation
+#' of the CDF via equation (2.5). Baumgartner \emph{et. al.} claim that a
+#' value of 3 is sufficient.
+#' @param lower_tail boolean, when \code{TRUE} returns \eqn{\Psi}{Psi}, otherwise
+#' compute the upper tail, which is more useful for hypothesis tests.
+#'
+#' @return a vector of the CDF of \eqn{b}, \eqn{\Psi(b)}{Psi(b)}.
+#' @seealso bws_stat
+#' @examples
 #'
 #'  # do it 500 times
 #'  set.seed(123)
@@ -33,19 +86,9 @@
 #'
 #' @template etc
 #' @template ref-bws
-#' @rdname bws_test
+#' @rdname bws_cdf
 #' @export
-bws_stat <- function(x, y) {
-    .Call('BWStest_bws_stat', PACKAGE = 'BWStest', x, y)
-}
-
-#' @param b a vector of BWS test statistics.
-#' @param maxj the maximum value of j to take in the approximate computation
-#' of the CDF via equation (2.5). Baumgartner \emph{et. al.} claim that a
-#' value of 3 is sufficient.
-#' @rdname bws_test
-#' @export
-bws_cdf <- function(b, maxj = 5L) {
-    .Call('BWStest_bws_cdf', PACKAGE = 'BWStest', b, maxj)
+bws_cdf <- function(b, maxj = 5L, lower_tail = TRUE) {
+    .Call('BWStest_bws_cdf', PACKAGE = 'BWStest', b, maxj, lower_tail)
 }
 

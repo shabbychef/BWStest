@@ -169,38 +169,48 @@ stopifnot(all(unlist(lapply(sort(x),function(anx) { sum(c(x,y) <= anx) })) == fo
  */
 
 //' @title
-//' Perform the Baumgartner-Weiss-Schindler test.
+//' Compute the test statistic of the Baumgartner-Weiss-Schindler test.
 //'
 //' @description
 //'
-//' Compute the Baumgartner-Weiss-Schindler test statistic, the CDF under the
-//' null, or perform the hypothesis test.
+//' Compute the Baumgartner-Weiss-Schindler test statistic.
+//'
+//' @details
+//'
+//' Given vectors \eqn{X} and \eqn{Y}, computes \eqn{B_X} and \eqn{B_Y} as
+//' described by Baumgartner \emph{et al.}, returning their average.
+//' The test statistic approximates the variance-weighted square norm of the
+//' difference in CDFs of the two distributions. For sufficiently large sample
+//' sizes (more than 20, say), the test statistic approaches the asymptotic
+//' value computed in another function under the null.
+//'
+//' The test statistic is based only on the ranks of the input. If the same
+//' monotonic transform is applied to both vectors, the result should be unchanged.
+//' Moreover, the test is inherently two-sided, so swapping \eqn{X} and \eqn{Y}
+//' should also leave the test statistic unchanged.
 //'
 //' @param x a vector.
 //' @param y a vector.
 //'
-//' @return return the BWS test statistic, \eqn{b}, or the CDF of \eqn{b} under
-//' the null.
-//'
+//' @return return the BWS test statistic, \eqn{B}.
+//' @seealso bws_cdf
 //' @examples
 //'
 //'  set.seed(1234)
-//'  x <- rnorm(1000)
-//'  y <- rnorm(100)
+//'  x <- runif(1000)
+//'  y <- runif(100)
 //'  bval <- bws_stat(x,y)
-//'
-//'  # do it 500 times
-//'  set.seed(123)
-//'  bvals <- replicate(500, bws_stat(rnorm(50),rnorm(50)))
-//'  pvals <- bws_cdf(bvals)
-//'  # these should be uniform!
-//'  \dontrun{ 
-//'    plot(ecdf(pvals)) 
-//'  }
+//'  # check a monotonic transform:
+//'  ftrans <- function(x) { log(1 + x) }
+//'  bval2 <- bws_stat(ftrans(x),ftrans(y))
+//'  stopifnot(all.equal(bval,bval2))
+//'  # check commutivity
+//'  bval3 <- bws_stat(y,x)
+//'  stopifnot(all.equal(bval,bval3))
 //'
 //' @template etc
 //' @template ref-bws
-//' @rdname bws_test
+//' @rdname bws_stat
 //' @export
 // [[Rcpp::export]]
 double bws_stat(NumericVector x,NumericVector y) {
@@ -233,14 +243,47 @@ double gamrat(double j) {
 	return pow(-1.0,j) * exp(Rf_lgammafn(j + 0.5) - Rf_lgammafn(0.5) - Rf_lgammafn(j + 1.0));
 }
 
+//' @title
+//' CDF of the Baumgartner-Weiss-Schindler test under the null.
+//'
+//' @description
+//'
+//' Computes the Baumgartner-Weiss-Schindler test statistic under the
+//' null hypothesis of equal distributions.
+//'
+//' @details
+//'
+//' Given value \eqn{b}, computes the CDF of the BWS statistic under
+//' the null, denoted as \eqn{\Psi(b)}{Psi(b)} by 
+//' Baumgartner \emph{et al.}  The CDF is computed from 
+//' equation (2.5) via numerical quadrature.
+//'
 //' @param b a vector of BWS test statistics.
 //' @param maxj the maximum value of j to take in the approximate computation
 //' of the CDF via equation (2.5). Baumgartner \emph{et. al.} claim that a
 //' value of 3 is sufficient.
-//' @rdname bws_test
+//' @param lower_tail boolean, when \code{TRUE} returns \eqn{\Psi}{Psi}, otherwise
+//' compute the upper tail, which is more useful for hypothesis tests.
+//'
+//' @return a vector of the CDF of \eqn{b}, \eqn{\Psi(b)}{Psi(b)}.
+//' @seealso bws_stat
+//' @examples
+//'
+//'  # do it 500 times
+//'  set.seed(123)
+//'  bvals <- replicate(500, bws_stat(rnorm(50),rnorm(50)))
+//'  pvals <- bws_cdf(bvals)
+//'  # these should be uniform!
+//'  \dontrun{ 
+//'    plot(ecdf(pvals)) 
+//'  }
+//'
+//' @template etc
+//' @template ref-bws
+//' @rdname bws_cdf
 //' @export
 // [[Rcpp::export]]
-NumericVector bws_cdf(NumericVector b,int maxj=5) {
+NumericVector bws_cdf(NumericVector b,int maxj=5,bool lower_tail=true) {
 	NumericVector retv(b.length());
 
 	double frontpart;
@@ -270,6 +313,9 @@ NumericVector bws_cdf(NumericVector b,int maxj=5) {
 			summus = prod1 * exp(-part2 * pow(fjp1,2));
 			retv[iii] += interm * sum(summus * weights);
 		}
+	}
+	if (! lower_tail) {
+		retv = 1.0 - retv;
 	}
 	return retv;
 }
