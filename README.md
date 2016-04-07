@@ -103,11 +103,10 @@ Looks good to me!
 
 Here we replicate figure 2A of Baumgartner _et al._. We draw two samples from the normal distribution,
 both with unit standard deviation, letting _a_ be the difference in means. 
-We check the empirical rejection rate at the 0.05 level for a few different tests (the two sample Cramer Von Mises test is not readily
-available for modern version of R, apparently). 
+We check the empirical rejection rate at the 0.05 level for a few different tests.
 As in Baumgartner, we find that the lowly t-test
-is the most powerful in this case, with the BWS and Wilcoxon displaying similar power, then the KS
-test the least powerful. Note that the Kolmogorov Smirnov test does not appear to have nominal
+is the most powerful in this case, with the BWS, Cramer-Von Mises, and Wilcoxon tests displaying similar power, 
+then the KS test the least powerful. Note that the Kolmogorov Smirnov test does not appear to have nominal
 coverage under the null, probably due to the small sample size.
 
 
@@ -116,6 +115,14 @@ n.sim <- 10000
 avals <- seq(0, 3.2, length.out = 17)
 alpha <- 0.05
 mnsize <- 10
+
+# this is archived on CRAN, unfortunately:
+library(CvM2SL2Test)
+# find the CVM critical value.
+critv <- uniroot(function(x) {
+    cvmts.pval(x, mnsize, mnsize) - alpha
+}, lower = 0, upper = 100, maxiter = 5000)$root
+
 set.seed(1234)
 simul <- sapply(avals, function(a) {
     rejs <- replicate(n.sim, {
@@ -125,15 +132,16 @@ simul <- sapply(avals, function(a) {
             alpha
         ttv <- t.test(x, y, alternative = "two.sided")$p.value <= 
             alpha
+        cvm <- cvmts.test(x, y) >= critv
         ksv <- ks.test(x, y, alternative = "two.sided")$p.value <= 
             alpha
         wcx <- wilcox.test(x, y, alternative = "two.sided")$p.value <= 
             alpha
-        c(bws, ttv, ksv, wcx)
+        c(bws, ttv, cvm, ksv, wcx)
     })
     rejrate <- rowMeans(rejs)
-    names(rejrate) <- c("BWS test", "t test", "Kolmogorov Smirnov test", 
-        "Wilcoxon test")
+    names(rejrate) <- c("BWS test", "t test", "Cramer-Von Mises test", 
+        "Kolmogorov Smirnov test", "Wilcoxon test")
     rejrate
 }, simplify = "matrix")
 
@@ -143,9 +151,10 @@ Arejrates$a <- avals
 
 ```r
 library(tidyr)
-plotdf <- tidyr::gather(Arejrates, "test", "rejection_rate", 
-    -a)
+library(dplyr)
 library(ggplot2)
+plotdf <- tidyr::gather(Arejrates, "test", "rejection_rate", 
+    -a) %>% dplyr::mutate(test = gsub("\\.", " ", test))
 ph <- ggplot(plotdf, aes(x = a, y = rejection_rate, 
     group = test, colour = test)) + geom_line() + geom_point() + 
     labs(x = "a, difference in means", y = "rejection rate")
@@ -159,8 +168,8 @@ both with zero mean, one with unit standard deviation, the other with standard d
 We compute the empirical rejection rate at the 0.05 level, dropping the t-test
 since it is not relevant for this formulation.
 As in Baumgartner, 
-we find the BWS test is the most powerful, followed by KS test, then Wilcoxon, which is essentially
-useless in this simulation.
+we find the BWS test is the most powerful, followed by KS test, then Cramer-Von Mises, 
+then Wilcoxon, which is basically useless in this simulation.
 
 
 ```r
@@ -168,6 +177,14 @@ n.sim <- 10000
 svals <- seq(1, 45, length.out = 10)
 alpha <- 0.05
 mnsize <- 10
+
+# this is archived on CRAN, unfortunately:
+library(CvM2SL2Test)
+# find the CVM critical value.
+critv <- uniroot(function(x) {
+    cvmts.pval(x, mnsize, mnsize) - alpha
+}, lower = 0, upper = 100, maxiter = 5000)$root
+
 set.seed(1234)
 simul <- sapply(svals, function(s) {
     rejs <- replicate(n.sim, {
@@ -175,15 +192,16 @@ simul <- sapply(svals, function(s) {
         y <- rnorm(mnsize, mean = 0, sd = s)
         bws <- bws_cdf(bws_stat(x, y), lower_tail = FALSE) <= 
             alpha
+        cvm <- cvmts.test(x, y) >= critv
         ksv <- ks.test(x, y, alternative = "two.sided")$p.value <= 
             alpha
         wcx <- wilcox.test(x, y, alternative = "two.sided")$p.value <= 
             alpha
-        c(bws, ksv, wcx)
+        c(bws, cvm, ksv, wcx)
     })
     rejrate <- rowMeans(rejs)
-    names(rejrate) <- c("BWS test", "Kolmogorov Smirnov test", 
-        "Wilcoxon test")
+    names(rejrate) <- c("BWS test", "Cramer-Von Mises test", 
+        "Kolmogorov Smirnov test", "Wilcoxon test")
     rejrate
 }, simplify = "matrix")
 
@@ -192,10 +210,9 @@ Brejrates$sigma <- svals
 ```
 
 ```r
-library(tidyr)
 plotdf <- tidyr::gather(Brejrates, "test", "rejection_rate", 
-    -sigma)
-library(ggplot2)
+    -sigma) %>% dplyr::mutate(test = gsub("\\.", " ", 
+    test))
 ph <- ggplot(plotdf, aes(x = sigma, y = rejection_rate, 
     group = test, colour = test)) + geom_line() + geom_point() + 
     labs(x = "sigma, ratio of standard deviations", 
@@ -209,7 +226,8 @@ Here we replicate figure 3A of Baumgartner _et al._. We draw two samples from th
 letting _l_ be the ratio of the rate parameters of the two populations.
 We compute the empirical rejection rate at the 0.05 level.
 As in Baumgartner, 
-we find the BWS test is the most powerful, followed by Wilcoxon, then KS test.
+we find the BWS test is the most powerful, followed by Wilcoxon, then Cramer-Von Mises, then the
+KS test.
 
 
 ```r
@@ -217,6 +235,14 @@ n.sim <- 10000
 lvals <- seq(1, 12)
 alpha <- 0.05
 mnsize <- 10
+
+# this is archived on CRAN, unfortunately:
+library(CvM2SL2Test)
+# find the CVM critical value.
+critv <- uniroot(function(x) {
+    cvmts.pval(x, mnsize, mnsize) - alpha
+}, lower = 0, upper = 100, maxiter = 5000)$root
+
 set.seed(1234)
 simul <- sapply(lvals, function(l) {
     rejs <- replicate(n.sim, {
@@ -224,15 +250,16 @@ simul <- sapply(lvals, function(l) {
         y <- rexp(mnsize, rate = l)
         bws <- bws_cdf(bws_stat(x, y), lower_tail = FALSE) <= 
             alpha
+        cvm <- cvmts.test(x, y) >= critv
         ksv <- ks.test(x, y, alternative = "two.sided")$p.value <= 
             alpha
         wcx <- wilcox.test(x, y, alternative = "two.sided")$p.value <= 
             alpha
-        c(bws, ksv, wcx)
+        c(bws, cvm, ksv, wcx)
     })
     rejrate <- rowMeans(rejs)
-    names(rejrate) <- c("BWS test", "Kolmogorov Smirnov test", 
-        "Wilcoxon test")
+    names(rejrate) <- c("BWS test", "Cramer-Von Mises test", 
+        "Kolmogorov Smirnov test", "Wilcoxon test")
     rejrate
 }, simplify = "matrix")
 
@@ -241,10 +268,9 @@ Crejrates$lratio <- lvals
 ```
 
 ```r
-library(tidyr)
 plotdf <- tidyr::gather(Crejrates, "test", "rejection_rate", 
-    -lratio)
-library(ggplot2)
+    -lratio) %>% dplyr::mutate(test = gsub("\\.", " ", 
+    test))
 ph <- ggplot(plotdf, aes(x = lratio, y = rejection_rate, 
     group = test, colour = test)) + geom_line() + geom_point() + 
     labs(x = "l, ratio of rate parameters", y = "rejection rate")
@@ -256,9 +282,10 @@ print(ph)
 Here we replicate figure 3B of Baumgartner _et al._. We draw two samples, one from the normal distribution
 with zero mean and varianced one-twelth, the other uniformly on -0.5 to 0.5. We take equal sample sizes
 from these two populations, then vary the sample size, checking the
-empirical rejection rate at the 0.05 level.
+empirical rejection rate at the 0.05 level. Since the first two moments are equal, the Wilcoxon test
+is useless here, and not applied.
 As in Baumgartner, 
-we find the BWS test is the most powerful, followed by the KS test, and the Wilcoxon is useless. 
+we find the BWS test is the most powerful, followed by the KS test and Cramer-Von Mises tests. 
 The power found here seems to be much higher than that found by Baumgartner, with near 100% rejection
 rate for a sample size of around 600, while Baumgartner finds those kinds of rejection rates at around
 a sample size of 1200. I theorize that Baumgartner _et al._ are plotting the _sum_ of the sample sizes
@@ -269,22 +296,32 @@ on the _x_ axis.
 n.sim <- 10000
 mvals <- seq(25, 1275, by = 125)
 alpha <- 0.05
+
+# this is archived on CRAN, unfortunately:
+library(CvM2SL2Test)
+
 set.seed(1234)
-simul <- sapply(mvals, function(m) {
+simul <- sapply(mvals, function(mnsize) {
+    # find the CVM critical value.  note that this
+    # basically converged for mnsize > 100 or so, so we
+    # take the min..  for reasons of speed.
+    critv <- uniroot(function(x) {
+        cvmts.pval(x, min(mnsize, 80), min(mnsize, 
+            80)) - alpha
+    }, lower = 0, upper = 2, maxiter = 100)$root
     rejs <- replicate(n.sim, {
-        x <- rnorm(m, mean = 0, sd = 1/sqrt(12))
-        y <- runif(m, min = -0.5, max = 0.5)
+        x <- rnorm(mnsize, mean = 0, sd = 1/sqrt(12))
+        y <- runif(mnsize, min = -0.5, max = 0.5)
         bws <- bws_cdf(bws_stat(x, y), lower_tail = FALSE) <= 
             alpha
+        cvm <- cvmts.test(x, y) >= critv
         ksv <- ks.test(x, y, alternative = "two.sided")$p.value <= 
             alpha
-        wcx <- wilcox.test(x, y, alternative = "two.sided")$p.value <= 
-            alpha
-        c(bws, ksv, wcx)
+        c(bws, cvm, ksv)
     })
     rejrate <- rowMeans(rejs)
-    names(rejrate) <- c("BWS test", "Kolmogorov Smirnov test", 
-        "Wilcoxon test")
+    names(rejrate) <- c("BWS test", "Cramer-Von Mises test", 
+        "Kolmogorov Smirnov test")
     rejrate
 }, simplify = "matrix")
 
@@ -293,10 +330,9 @@ Drejrates$ssize <- mvals
 ```
 
 ```r
-library(tidyr)
 plotdf <- tidyr::gather(Drejrates, "test", "rejection_rate", 
-    -ssize)
-library(ggplot2)
+    -ssize) %>% dplyr::mutate(test = gsub("\\.", " ", 
+    test))
 ph <- ggplot(plotdf, aes(x = ssize, y = rejection_rate, 
     group = test, colour = test)) + geom_line() + geom_point() + 
     labs(x = "m=n, sample size", y = "rejection rate")
