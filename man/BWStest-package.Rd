@@ -32,22 +32,31 @@ GNU Lesser General Public License for more details.
 Steven E. Pav \email{shabbychef@gmail.com}
 }
 \references{
-W. Baumgartner, P. Weiss, H. Schindler, 'A Nonparametric Test for the General Two-Sample Problem', 
-Biometrics, Vol. 54, No. 3 (Sep., 1998), pp. 1129-1135. 
+W. Baumgartner, P. Weiss, H. Schindler, 'A nonparametric test for the general two-sample problem', 
+Biometrics 54, no. 3 (Sep., 1998): pp. 1129-1135. 
 \url{http://doai.io/10.2307/2533862}
 
-M. Neuhauser, 'Exact Tests Based on the Baumgartner-Weiss-Schindler Statistic--A Survey', 
-Statistical Papers, Vol 46 (2005), pp. 1-30.
+M. Neuhauser, 'Exact tests based on the Baumgartner-Weiss-Schindler Statistic--a survey', 
+Statistical Papers 46, no. 1 (2005): pp. 1-30.
 \url{http://doai.io/10.1007/BF02762032}
 
-M. Neuhauser, 'One-Sided Two-Sample and Trend Tests Based on a Modified 
-Baumgartner-Weiss-Schindler Statistic', J. Nonparametric Statistics, Vol 13
-(2001) pp 729-739.
+M. Neuhauser, 'One-sided two-sample and trend tests based on a modified 
+Baumgartner-Weiss-Schindler statistic', J. Nonparametric Statistics 13, no.
+5 (2001): pp 729-739.
 \url{http://doai.io/10.1080/10485250108832874}
 
-H. Murakami, 'K-Sample Rank Test Based on Modified Baumgartner Statistic and
-its Power Comparison', J. Jpn. Comp. Statist. Vol 19 (2006), pp. 1-13.
+H. Murakami, 'K-sample rank test based on modified Baumgartner statistic and
+its power comparison', J. Jpn. Comp. Statist. 19, no. 1 (2006): pp. 1-13.
+\url{http://doai.io/10.5183/jjscs1988.19.1}
+
+H. Murakami, 'Modified Baumgartner Statistics for the two-sample and
+multisample problems: a numerical comparison', J. Stat. Comp. and Sim.
+82, no. 5 (2012): pp. 711-728.
 \url{http://doai.io/10.1080/00949655.2010.551516}
+
+H. Murakami, 'Lepage type statistic based on the modified Baumgartner statistic',
+Comp. Stat. & Data Analysis 51 (2007): pp 5061-5067. 
+\url{http://doai.io/10.1016/j.csda.2006.04.026}
 }
 \keyword{package}
 
