@@ -4,6 +4,9 @@
 
 [![Build Status](https://travis-ci.org/shabbychef/BWStest.png)](https://travis-ci.org/shabbychef/BWStest)
 [![codecov.io](http://codecov.io/github/shabbychef/BWStest/coverage.svg?branch=master)](http://codecov.io/github/shabbychef/BWStest?branch=master)
+[![CRAN](http://www.r-pkg.org/badges/version/BWStest)](http://cran.rstudio.com/package=BWStest) 
+[![Downloads](http://cranlogs.r-pkg.org/badges/BWStest?color=green)](http://www.r-pkg.org/pkg/BWStest)
+[![Total](http://cranlogs.r-pkg.org/badges/grand-total/BWStest?color=green)](http://www.r-pkg.org/pkg/BWStest)
 ![RCpp](https://img.shields.io/badge/RCpp-inside-blue.svg)
 
 Performs the [Baumgartner-Weiß-Schindler 2-sample test](http://doai.io/10.2307/2533862) of equal probability
@@ -14,11 +17,14 @@ distributions.
 ## Installation
 
 This package can be installed 
+from CRAN, 
 via [drat](https://github.com/eddelbuettel/drat "drat"), or
 from github:
 
 
 ```r
+# via CRAN:
+install.packages("BWStest")
 # via drat:
 if (require(drat)) {
     drat:::add("shabbychef")
@@ -101,7 +107,7 @@ Looks good to me!
 
 ## Under the alternative
 
-Here we replicate figure 2A of Baumgartner _et al._. We draw two samples from the normal distribution,
+Here we replicate figure 2A of Baumgartner _et al._ We draw two samples from the normal distribution,
 both with unit standard deviation, letting _a_ be the difference in means. 
 We check the empirical rejection rate at the 0.05 level for a few different tests.
 As in Baumgartner, we find that the lowly t-test
@@ -163,7 +169,7 @@ print(ph)
 
 <img src="github_extra/figure/fig_two_A-1.png" title="plot of chunk fig_two_A" alt="plot of chunk fig_two_A" width="700px" height="500px" />
 
-Here we replicate figure 2B of Baumgartner _et al._. We draw two samples from the normal distribution,
+Here we replicate figure 2B of Baumgartner _et al._ We draw two samples from the normal distribution,
 both with zero mean, one with unit standard deviation, the other with standard deviation of _sigma_.
 We compute the empirical rejection rate at the 0.05 level, dropping the t-test
 since it is not relevant for this formulation.
@@ -222,7 +228,7 @@ print(ph)
 
 <img src="github_extra/figure/fig_two_B-1.png" title="plot of chunk fig_two_B" alt="plot of chunk fig_two_B" width="700px" height="500px" />
 
-Here we replicate figure 3A of Baumgartner _et al._. We draw two samples from the exponential distribution,
+Here we replicate figure 3A of Baumgartner _et al._ We draw two samples from the exponential distribution,
 letting _l_ be the ratio of the rate parameters of the two populations.
 We compute the empirical rejection rate at the 0.05 level.
 As in Baumgartner, 
@@ -279,22 +285,21 @@ print(ph)
 
 <img src="github_extra/figure/fig_three_A-1.png" title="plot of chunk fig_three_A" alt="plot of chunk fig_three_A" width="700px" height="500px" />
 
-Here we replicate figure 3B of Baumgartner _et al._. We draw two samples, one from the normal distribution
+Here we replicate figure 3B of Baumgartner _et al._ We draw two samples, one from the normal distribution
 with zero mean and varianced one-twelth, the other uniformly on -0.5 to 0.5. We take equal sample sizes
 from these two populations, then vary the sample size, checking the
 empirical rejection rate at the 0.05 level. Since the first two moments are equal, the Wilcoxon test
 is useless here, and not applied.
-As in Baumgartner, 
-we find the BWS test is the most powerful, followed by the KS test and Cramer-Von Mises tests. 
-The power found here seems to be much higher than that found by Baumgartner, with near 100% rejection
-rate for a sample size of around 600, while Baumgartner finds those kinds of rejection rates at around
-a sample size of 1200. I theorize that Baumgartner _et al._ are plotting the _sum_ of the sample sizes
-on the _x_ axis.
+As in Baumgartner, we find the BWS test is the most powerful, 
+followed by the KS test and Cramer-Von Mises tests. 
+Based on the power plots here, I theorize that Baumgartner _et al._ are plotting the _total_ sample
+sizes on the _x_ axis, that is, drawing _n_ from both distributions, then plotting empirical power
+versus _2n_. We follow that convention, which makes the plots match those of Baumgartner.
 
 
 ```r
 n.sim <- 10000
-mvals <- seq(25, 1275, by = 125)
+mvals <- seq(10, 670, by = 60)
 alpha <- 0.05
 
 # this is archived on CRAN, unfortunately:
@@ -326,7 +331,7 @@ simul <- sapply(mvals, function(mnsize) {
 }, simplify = "matrix")
 
 Drejrates <- data.frame(t(simul))
-Drejrates$ssize <- mvals
+Drejrates$ssize <- 2 * mvals
 ```
 
 ```r
@@ -335,7 +340,7 @@ plotdf <- tidyr::gather(Drejrates, "test", "rejection_rate",
     test))
 ph <- ggplot(plotdf, aes(x = ssize, y = rejection_rate, 
     group = test, colour = test)) + geom_line() + geom_point() + 
-    labs(x = "m=n, sample size", y = "rejection rate")
+    labs(x = "m+n, total sample size", y = "rejection rate")
 print(ph)
 ```
 

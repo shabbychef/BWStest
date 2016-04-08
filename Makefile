@@ -10,7 +10,7 @@
 VMAJOR 						 = 0
 VMINOR 						 = 1
 VPATCH  					 = 0
-VDEV 							 = 
+VDEV 							 = .1000
 VERSION 					 = $(VMAJOR).$(VMINOR).$(VPATCH)$(VDEV)
 TODAY 						:= $(shell date +%Y-%m-%d)
 
@@ -144,10 +144,10 @@ $(DRAT_SENTINEL) : $(PKG_TGZ)
 dratit : $(DRAT_SENTINEL) ## insert into my drat store
 
 viewit : README.md ## view the README.md locally
-	$(DOCKER) run -d -p 0.0.0.0:9919:6419 --name $(PKG_LCNAME) -v $(pwd):/srv/grip/wiki:ro shabbychef/grip
+	$(DOCKER) run -d -p 0.0.0.0:9919:6419 --name $(PKG_LCNAME) -v $$(pwd):/srv/grip/wiki:ro shabbychef/grip
 	xdg-open http://0.0.0.0:9919
 	@echo "to stop, run"
-	@echo "docker rm $$(docker stop $(PKG_LCNAME))"
+	@echo 'docker rm $$(docker stop $(PKG_LCNAME))'
 
 #for vim modeline: (do not edit)
 # vim:ts=2:sw=2:tw=129:fdm=marker:fmr=FOLDUP,UNFOLD:cms=#%s:tags=.tags;:syn=make:ft=make:ai:si:cin:nu:fo=croqt:cino=p0t0c5(0:
