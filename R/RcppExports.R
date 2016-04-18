@@ -140,6 +140,7 @@ bws_cdf <- function(b, maxj = 5L, lower_tail = TRUE) {
 #' 2012 paper.}
 #' \item{3}{Murakami's \eqn{B_3} statistic, from his 2012 paper.}
 #' \item{4}{Murakami's \eqn{B_4} statistic, from his 2012 paper.}
+#' \item{5}{Murakami's \eqn{B_5} statistic, from his 2012 paper, with a log weighting.}
 #' }
 #'
 #' @param x a vector.
@@ -161,6 +162,22 @@ bws_cdf <- function(b, maxj = 5L, lower_tail = TRUE) {
 #' x <- runif(1000)
 #' y <- runif(100)
 #' bval <- murakami_stat(x,y,1)
+#'
+#' \dontrun{
+#' if (require(partitions)) {
+#'   nx <- 6
+#'   ny <- 5
+#'   # monte carlo
+#'   set.seed(1234)
+#'   repli <- replicate(3000,murakami_stat(rnorm(nx),rnorm(ny),0L))
+#'   # under the null, perform the permutation test:
+#'   P <- partitions::setparts(c(nx,ny))
+#'   if (nx == ny) { allem <- murakami_stat_parts(cbind(P,3-P),0L) 
+#'   } else { allem <- murakami_stat_parts(P,0L) }
+#'   plot(ecdf(allem)) 
+#'   lines(ecdf(repli),col='red') 
+#' }
+#' }
 #'
 #' @template etc
 #' @template ref-bws

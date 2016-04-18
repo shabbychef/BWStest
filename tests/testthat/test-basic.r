@@ -55,6 +55,17 @@ test_that("runs without error",{#FOLDUP
 	# sentinel
 	expect_true(TRUE)
 })#UNFOLD
+test_that("murakami computations",{#FOLDUP
+	set.char.seed("f1a7627e-3545-4fdf-a5bf-10cf9a4bb396")
+	for (flavor in 0:5) {
+		statv <- murakami_stat(rnorm(10),rnorm(10),flavor)
+		allev <- murakami_stat_parts(partitions::setparts(c(3,3)),flavor)
+		cdfv <- murakami_cdf(seq(-1,1,length.out=101),n1=5,n2=5,flavor)
+	}
+
+	# sentinel
+	expect_true(TRUE)
+})#UNFOLD
 
 # 2FIX: check the effects of NA
 #UNFOLD

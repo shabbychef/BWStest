@@ -6,8 +6,7 @@ language: r
 # set this true to install libgmp-dev!?
 sudo: true
 
-# turn this off for now:
-#cache : packages
+cache : packages
 
 r:
   - release

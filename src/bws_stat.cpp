@@ -371,6 +371,7 @@ NumericVector bws_cdf(NumericVector b,int maxj=5,bool lower_tail=true) {
 //' 2012 paper.}
 //' \item{3}{Murakami's \eqn{B_3} statistic, from his 2012 paper.}
 //' \item{4}{Murakami's \eqn{B_4} statistic, from his 2012 paper.}
+//' \item{5}{Murakami's \eqn{B_5} statistic, from his 2012 paper, with a log weighting.}
 //' }
 //'
 //' @param x a vector.
@@ -393,6 +394,22 @@ NumericVector bws_cdf(NumericVector b,int maxj=5,bool lower_tail=true) {
 //' y <- runif(100)
 //' bval <- murakami_stat(x,y,1)
 //'
+//' \dontrun{
+//' if (require(partitions)) {
+//'   nx <- 6
+//'   ny <- 5
+//'   # monte carlo
+//'   set.seed(1234)
+//'   repli <- replicate(3000,murakami_stat(rnorm(nx),rnorm(ny),0L))
+//'   # under the null, perform the permutation test:
+//'   P <- partitions::setparts(c(nx,ny))
+//'   if (nx == ny) { allem <- murakami_stat_parts(cbind(P,3-P),0L) 
+//'   } else { allem <- murakami_stat_parts(P,0L) }
+//'   plot(ecdf(allem)) 
+//'   lines(ecdf(repli),col='red') 
+//' }
+//' }
+//'
 //' @template etc
 //' @template ref-bws
 //' @template ref-modtests
@@ -401,25 +418,125 @@ NumericVector bws_cdf(NumericVector b,int maxj=5,bool lower_tail=true) {
 // [[Rcpp::export]]
 NumericVector murakami_stat_parts(IntegerMatrix Parts,int flavor=0) {
 	int nc=Parts.ncol();
+	int N=Parts.nrow();
+	int nx,ny;
+	int iii,jjj;
+	int xcount,ycount;
+	double evx,evy,vvx,vvy,Np1,nxp1,nxp2,nyp1,nyp2;
+	double nonce,npart,dpart,bplus;
 	NumericVector B1(nc);
 	NumericVector B2(nc);
 	NumericVector Bstat(nc);
-	// ack! fill this in!
 
+	Np1  = N + 1;
+
+	for (jjj=0;jjj<nc;jjj++) {
+		// prealloc just to make sure:
+		B1(jjj) = 0.0;
+		B2(jjj) = 0.0;
+
+		// compute the number in x and y, essentially.
+		nx = 0;
+		for (iii=0;iii<N;iii++) {
+			if (Parts(iii,jjj) == 1) { nx++; }
+		}
+		ny = N - nx;
+
+		nxp1 = nx + 1;
+		nyp1 = ny + 2;
+
+		switch(flavor) {
+			case 0 :
+			case 2 :
+				evx = N / nx;
+				evy = N / ny;
+				vvx = ny * N;
+				vvy = nx * N;
+				break ;
+			case 1 :
+			case 3 :
+			case 4 :
+			case 5 :
+				nxp2 = nx + 2;
+				nyp2 = ny + 2;
+				evx = Np1 / nxp1;
+				evy = Np1 / nyp1;
+				vvx = ny * Np1 / nxp2;
+				vvy = nx * Np1 / nyp2;
+				break ;
+			default : 
+				stop("unknown flavor; try value in [0,1,2,3,4,5]"); 
+				break;
+		}
+
+		xcount = 0;
+		ycount = 0;
+
+		// subtle hint: templating could be your friend here..
+		for (iii=0;iii<N;iii++) {
+			if (Parts(iii,jjj) == 1) {
+				xcount++;
+				nonce = xcount / (nxp1);
+				npart = ((iii+1) - evx * xcount);
+				dpart = (nonce * (1.0 - nonce) * vvx);
+				switch(flavor) {
+					case 0:
+						bplus = npart * npart / dpart;
+						break;
+					case 1:
+						bplus = (1.0 / nx) * npart * npart / dpart;
+						break;
+					case 2:
+						bplus = npart * abs(npart) / dpart;
+						break;
+					case 3:
+						bplus = (1.0 / nx) * npart * npart / (dpart * dpart);
+						break;
+					case 4:
+						bplus = (1.0 / nx) * abs(npart) / (dpart * dpart);
+						break;
+					case 5:
+						bplus = (1.0 / nx) * npart * npart / log(dpart);
+						break;
+				}
+				B1(jjj) += bplus;
+			} else {
+				ycount++;
+				nonce = ycount / (nyp1);
+				npart = ((iii+1) - evy * ycount);
+				dpart = (nonce * (1.0 - nonce) * vvy);
+				switch(flavor) {
+					case 0:
+						bplus = npart * npart / dpart;
+						break;
+					case 1:
+						bplus = (1.0 / ny) * npart * npart / dpart;
+						break;
+					case 2:
+						bplus = npart * abs(npart) / dpart;
+						break;
+					case 3:
+						bplus = (1.0 / ny) * npart * npart / (dpart * dpart);
+						break;
+					case 4:
+						bplus = (1.0 / ny) * abs(npart) / (dpart * dpart);
+						break;
+					case 5:
+						bplus = (1.0 / ny) * npart * npart / log(dpart);
+						break;
+				}
+				B2(jjj) += bplus;
+			}
+		}
+	}
+
+	// combine them. usually the average.
 	switch(flavor) {
-		case 0 : 
-
+		case 2 : 
+			Bstat = 0.5 * (B2 - B1);
 			break;
-		case 1 :
-
-			break;
-
-		case 2 :
-
-			break;
-
-		default : 
-			stop("unknown flavor; try value in [0,4]"); 
+		default :
+			Bstat = 0.5 * (B1 + B2);
 			break;
 	}
 	return Bstat;
@@ -438,13 +555,14 @@ double murakami_stat(NumericVector x,NumericVector y,int flavor=0) {
 	IntegerMatrix parts(mpn,1);
 	int iii;
 	for (iii=0;iii<mpn;iii++) { parts(iii,0) = 2; }
-	for (iii=0;iii<m;iii++) { 
+	for (iii=0;iii<n;iii++) { 
 		parts(G(iii)-1,0) = 1;
 	}
 	NumericVector Bstat = murakami_stat_parts(parts,flavor);
 	double B = Bstat(0);
 	return B;
 }
+
 
 //for vim modeline: (do not edit)
 // vim:ts=2:sw=2:tw=129:fdm=marker:fmr=FOLDUP,UNFOLD:cms=//%s:tags=.c_tags;:syn=cpp:ft=cpp:mps+=<\:>:ai:si:cin:nu:fo=croql:cino=p0t0c5(0:

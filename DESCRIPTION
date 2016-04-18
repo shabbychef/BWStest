@@ -24,3 +24,4 @@ Collate:
     'bws_test.r'
     'BWStest.r'
     'RcppExports.R'
+    'zzz_murakami_dist.r'

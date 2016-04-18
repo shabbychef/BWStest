@@ -48,6 +48,7 @@
 #' @import Rcpp 
 #' @useDynLib BWStest
 #' @importFrom Rcpp evalCpp
+#' @importFrom stats ecdf
 #' @exportPattern "^[[:alpha:]]+"
 #'
 NULL
@@ -61,6 +62,11 @@ NULL
 #' \newcommand{\CRANpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 #' \newcommand{\cranBWStest}{\CRANpkg{BWStest}}
 #' \newcommand{\BWStest}{\href{https://github.com/shabbychef/BWStest}}
+#'
+#' @section \BWStest{} Initial Version 0.2.0 (2016-) :
+#' \itemize{
+#' \item Adding Murakami statistics.
+#' }
 #'
 #' @section \BWStest{} Initial Version 0.1.0 (2016-04-07) :
 #' \itemize{
