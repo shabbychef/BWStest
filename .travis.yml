@@ -3,7 +3,8 @@
 
 language: r
 
-sudo: false
+# set this true to install libgmp-dev!?
+sudo: true
 
 # turn this off for now:
 #cache : packages
@@ -14,7 +15,7 @@ r:
 
 # for gmp for partitions:
 apt_packages:
-  - "libgmp3-dev"
+  - "libgmp-dev"
 
 r_github_packages :
   - jimhester/covr
