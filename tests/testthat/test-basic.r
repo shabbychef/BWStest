@@ -60,7 +60,15 @@ test_that("murakami computations",{#FOLDUP
 	for (flavor in 0:5) {
 		statv <- murakami_stat(rnorm(10),rnorm(10),flavor)
 		allev <- murakami_stat_parts(partitions::setparts(c(3,3)),flavor)
-		cdfv <- murakami_cdf(seq(-1,1,length.out=101),n1=5,n2=5,flavor)
+	}
+
+	# all for coverage
+	for (flavor in c(0:5)) {
+		for (lower_tail in c(FALSE,TRUE)) {
+			cdfv <- murakami_cdf(seq(-1,1,length.out=101),n1=5,n2=5,flavor=flavor,lower_tail=lower_tail)
+			cdfv <- murakami_cdf(seq(-1,1,length.out=101),n1=5,n2=4,flavor=flavor,lower_tail=lower_tail)
+			cdfv <- murakami_cdf(seq(-1,1,length.out=101),n1=4,n2=5,flavor=flavor,lower_tail=lower_tail)
+		}
 	}
 
 	# sentinel

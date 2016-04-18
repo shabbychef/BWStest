@@ -34,7 +34,7 @@ set.char.seed <- function(str) {
 THOROUGHNESS <- getOption('test.thoroughness',1.0)
 #UNFOLD
 
-context("basic sanity checks")#FOLDUP
+context("bws sanity checks")#FOLDUP
 test_that("bws_stat commutative",{#FOLDUP
 	set.char.seed("dbf07485-dfb6-4b1f-bb63-7ac53e9fb4fa")
 	x <- rnorm(100)
@@ -92,19 +92,18 @@ test_that("bws_test under alternative",{#FOLDUP
 	# sentinel
 	expect_true(TRUE)
 })#UNFOLD
-test_that("bws_cdf sane",{#FOLDUP
+test_that("bws_cdf sane range",{#FOLDUP
 	bvals <- exp(seq(log(0.1),log(100),length.out=201))
-	pvals <- bws_cdf(bvals,lower_tail=TRUE)
-	expect_true(all(pvals >= 0))
-	expect_true(all(pvals <= 1))
-	pvals <- bws_cdf(bvals,lower_tail=FALSE)
-	expect_true(all(pvals >= 0))
-	expect_true(all(pvals <= 1))
+	for (lower_tail in c(TRUE,FALSE)) {
+		pvals <- bws_cdf(bvals,lower_tail=lower_tail)
+		expect_true(all(pvals >= 0))
+		expect_true(all(pvals <= 1))
+	}
 
 	# sentinel
 	expect_true(TRUE)
 })#UNFOLD
-test_that("bws_cdf sane",{#FOLDUP
+test_that("bws_cdf sane monotonic",{#FOLDUP
 	is.sorted <- function(x) { all(diff(x) >= 0) }
 	bvals <- exp(seq(log(0.1),log(4),length.out=201))
 	pvals <- bws_cdf(bvals,lower_tail=TRUE)
@@ -120,6 +119,118 @@ test_that("bws_cdf deterministic",{#FOLDUP
 	pv1 <- bws_cdf(bvals)
 	pv2 <- bws_cdf(bvals)
 	expect_equal(pv1,pv2)
+
+	# sentinel
+	expect_true(TRUE)
+})#UNFOLD
+
+# 2FIX: check the effects of NA
+#UNFOLD
+
+context("murakami sanity checks")#FOLDUP
+test_that("murakami_stat commutative",{#FOLDUP
+	set.char.seed("4871d1c0-3814-46de-91f4-5862d7039b9b")
+	x <- rnorm(100)
+	y <- rnorm(100)
+
+	for (flavor in c(0,1,3,4,5)) {
+		b1 <- murakami_stat(x,y,flavor)
+		b2 <- murakami_stat(y,x,flavor)
+		expect_equal(b1,b2,tolerance=1e-7)
+	}
+	for (flavor in c(2)) {
+		b1 <- murakami_stat(x,y,flavor)
+		b2 <- murakami_stat(y,x,flavor)
+		expect_equal(b1,-b2,tolerance=1e-7)
+	}
+
+	# sentinel
+	expect_true(TRUE)
+})#UNFOLD
+test_that("murakami_stat translation invariant",{#FOLDUP
+	set.char.seed("be591725-a3d9-4d1c-8c33-5036bb3e839f")
+	x <- rnorm(100)
+	y <- rnorm(100)
+
+	for (flavor in 0:5) {
+		b1 <- murakami_stat(x,y,flavor)
+		b2 <- murakami_stat(x+1,y+1,flavor)
+		expect_equal(b1,b2)
+	}
+
+	# sentinel
+	expect_true(TRUE)
+})#UNFOLD
+test_that("murakami_stat monotonic transform invariant",{#FOLDUP
+	set.char.seed("63c7427a-f991-4dba-a272-c9c40c912e9d")
+	x <- runif(100)
+	y <- runif(100)
+	ffunc <- function(z) { log(1+z) }
+	fx <- ffunc(x)
+	fy <- ffunc(y)
+
+	for (flavor in 0:5) {
+		b1 <- murakami_stat(x,y,flavor)
+		b2 <- murakami_stat(fx,fy,flavor)
+		expect_equal(b1,b2)
+	}
+
+	# sentinel
+	expect_true(TRUE)
+})#UNFOLD
+test_that("murakami_cdf sane range",{#FOLDUP
+	bvals <- exp(seq(log(0.1),log(100),length.out=201))
+	for (flavor in 0:5) {
+		for (lower_tail in c(TRUE,FALSE)) {
+			pvals <- murakami_cdf(bvals,5,5,flavor,lower_tail=lower_tail)
+			expect_true(all(pvals >= 0))
+			expect_true(all(pvals <= 1))
+		}
+	}
+
+	# sentinel
+	expect_true(TRUE)
+})#UNFOLD
+test_that("murakami_cdf sane montonic",{#FOLDUP
+	is.sorted <- function(x) { all(diff(x) >= 0) }
+	bvals <- exp(seq(log(0.1),log(4),length.out=201))
+	for (flavor in 0:5) {
+		pvals <- murakami_cdf(bvals,5,5,flavor,lower_tail=TRUE)
+		expect_true(is.sorted(pvals))
+		pvals <- murakami_cdf(bvals,5,5,flavor,lower_tail=FALSE)
+		expect_true(is.sorted(rev(pvals)))
+	}
+
+	# sentinel
+	expect_true(TRUE)
+})#UNFOLD
+test_that("murakami_cdf deterministic",{#FOLDUP
+	bvals <- exp(seq(log(0.1),log(100),length.out=201))
+	for (flavor in 0:5) {
+		for (lower_tail in c(TRUE,FALSE)) {
+			pv1 <- murakami_cdf(bvals,5,5,flavor,lower_tail=lower_tail)
+			pv2 <- murakami_cdf(bvals,5,5,flavor,lower_tail=lower_tail)
+			expect_equal(pv1,pv2)
+		}
+	}
+
+	# sentinel
+	expect_true(TRUE)
+})#UNFOLD
+test_that("murakami_cdf nearly uniform",{#FOLDUP
+	skip_on_cran()
+
+	for (flavor in c(0:5)) {
+		set.char.seed("531bf9cf-a53a-41e0-a47a-3fc92334a6f5")
+		for (nvals in list(c(9,9),c(9,8),c(8,9))) {
+			n1 <- nvals[1]
+			n2 <- nvals[2]
+			Bvals <- replicate(2000,murakami_stat(rnorm(n1),rnorm(n2),flavor))
+			pvals <- sort(murakami_cdf(Bvals,n1,n2,flavor))
+			altps <- seq(0,1,length.out=length(Bvals))
+			expect_equal(max(abs(pvals-altps)),0,tolerance=2.5e-2)
+		}
+	}
 
 	# sentinel
 	expect_true(TRUE)

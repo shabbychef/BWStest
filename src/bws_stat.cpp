@@ -443,7 +443,7 @@ NumericVector murakami_stat_parts(IntegerMatrix Parts,int flavor=0) {
 		ny = N - nx;
 
 		nxp1 = nx + 1;
-		nyp1 = ny + 2;
+		nyp1 = ny + 1;
 
 		switch(flavor) {
 			case 0 :
@@ -549,12 +549,11 @@ double murakami_stat(NumericVector x,NumericVector y,int flavor=0) {
 	NumericVector sortx = clone(x); std::sort(sortx.begin(), sortx.end());
 	NumericVector sorty = clone(y); std::sort(sorty.begin(), sorty.end());
 	IntegerVector G = full_rank<NumericVector, double>(sorty, sortx);
-	double m = (double)y.size();
-	double n = (double)x.size();
-	double mpn = m + n;
-	IntegerMatrix parts(mpn,1);
+	int n = x.size();
+	int N = n + y.size();
+	IntegerMatrix parts(N,1);
 	int iii;
-	for (iii=0;iii<mpn;iii++) { parts(iii,0) = 2; }
+	for (iii=0;iii<N;iii++) { parts(iii,0) = 2; }
 	for (iii=0;iii<n;iii++) { 
 		parts(G(iii)-1,0) = 1;
 	}
