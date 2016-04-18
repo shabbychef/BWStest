@@ -77,6 +77,8 @@
 #' @rdname murakami_cdf
 #' @export
 murakami_cdf <- function(B, n1, n2, flavor=0L, lower_tail=TRUE) {
+	# errors on flavor can come later, but this is important here:
+	stopifnot(n1 > 0,n2 > 0)
 	CUTOFF <- 9
 	allv <- .murakami_memo_stats(min(CUTOFF,n1),min(CUTOFF,n2),flavor)
 
