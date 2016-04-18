@@ -31,14 +31,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // murakami_stat_parts
-NumericVector murakami_stat_parts(IntegerMatrix parts, int flavor);
-RcppExport SEXP BWStest_murakami_stat_parts(SEXP partsSEXP, SEXP flavorSEXP) {
+NumericVector murakami_stat_parts(IntegerMatrix Parts, int flavor);
+RcppExport SEXP BWStest_murakami_stat_parts(SEXP PartsSEXP, SEXP flavorSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< IntegerMatrix >::type parts(partsSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type Parts(PartsSEXP);
     Rcpp::traits::input_parameter< int >::type flavor(flavorSEXP);
-    __result = Rcpp::wrap(murakami_stat_parts(parts, flavor));
+    __result = Rcpp::wrap(murakami_stat_parts(Parts, flavor));
     return __result;
 END_RCPP
 }

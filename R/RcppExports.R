@@ -145,7 +145,7 @@ bws_cdf <- function(b, maxj = 5L, lower_tail = TRUE) {
 #' @param x a vector.
 #' @param y a vector.
 #' @param flavor which \sQuote{flavor} of test statistic. 
-#' @param P a matrix, as output by \code{\link{partitions::setparts}}, consisting of
+#' @param Parts a matrix, as output by \code{\link{setparts}}, consisting of
 #' 1s and 2s. Each column is a separate test, the rows correspond to the ordered elements
 #' in the grouped set, with no possibility of ties. The 1s and 2s denote which of the two
 #' samples the observation belongs to.
@@ -167,8 +167,8 @@ bws_cdf <- function(b, maxj = 5L, lower_tail = TRUE) {
 #' @template ref-modtests
 #' @rdname murakami_stat
 #' @export
-murakami_stat_parts <- function(parts, flavor = 0L) {
-    .Call('BWStest_murakami_stat_parts', PACKAGE = 'BWStest', parts, flavor)
+murakami_stat_parts <- function(Parts, flavor = 0L) {
+    .Call('BWStest_murakami_stat_parts', PACKAGE = 'BWStest', Parts, flavor)
 }
 
 #' @rdname murakami_stat

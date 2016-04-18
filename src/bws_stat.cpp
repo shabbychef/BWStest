@@ -376,7 +376,7 @@ NumericVector bws_cdf(NumericVector b,int maxj=5,bool lower_tail=true) {
 //' @param x a vector.
 //' @param y a vector.
 //' @param flavor which \sQuote{flavor} of test statistic. 
-//' @param P a matrix, as output by \code{\link{partitions::setparts}}, consisting of
+//' @param Parts a matrix, as output by \code{\link{setparts}}, consisting of
 //' 1s and 2s. Each column is a separate test, the rows correspond to the ordered elements
 //' in the grouped set, with no possibility of ties. The 1s and 2s denote which of the two
 //' samples the observation belongs to.
@@ -399,10 +399,11 @@ NumericVector bws_cdf(NumericVector b,int maxj=5,bool lower_tail=true) {
 //' @rdname murakami_stat
 //' @export
 // [[Rcpp::export]]
-NumericVector murakami_stat_parts(IntegerMatrix parts,int flavor=0) {
-	NumericVector B1(parts.ncol());
-	NumericVector B2(parts.ncol());
-	NumericVector Bstat(parts.ncol());
+NumericVector murakami_stat_parts(IntegerMatrix Parts,int flavor=0) {
+	int nc=Parts.ncol();
+	NumericVector B1(nc);
+	NumericVector B2(nc);
+	NumericVector Bstat(nc);
 	// ack! fill this in!
 
 	switch(flavor) {

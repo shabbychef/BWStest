@@ -11,6 +11,10 @@ r:
   - release
   - devel
 
+# for gmp for partitions:
+apt_packages:
+  - libgmp-dev
+
 r_github_packages :
   - jimhester/covr
 

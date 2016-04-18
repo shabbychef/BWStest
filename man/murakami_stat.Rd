@@ -5,21 +5,21 @@
 \alias{murakami_stat_parts}
 \title{Compute Murakami's test statistic.}
 \usage{
-murakami_stat_parts(parts, flavor = 0L)
+murakami_stat_parts(Parts, flavor = 0L)
 
 murakami_stat(x, y, flavor = 0L)
 }
 \arguments{
+\item{Parts}{a matrix, as output by \code{\link{setparts}}, consisting of
+1s and 2s. Each column is a separate test, the rows correspond to the ordered elements
+in the grouped set, with no possibility of ties. The 1s and 2s denote which of the two
+samples the observation belongs to.}
+
 \item{flavor}{which \sQuote{flavor} of test statistic.}
 
 \item{x}{a vector.}
 
 \item{y}{a vector.}
-
-\item{P}{a matrix, as output by \code{\link{partitions::setparts}}, consisting of
-1s and 2s. Each column is a separate test, the rows correspond to the ordered elements
-in the grouped set, with no possibility of ties. The 1s and 2s denote which of the two
-samples the observation belongs to.}
 }
 \value{
 The BWS test statistic, \eqn{B_j}. For \code{murakami_stat_parts}, a vector of
