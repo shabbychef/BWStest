@@ -14,7 +14,7 @@ r:
 
 # for gmp for partitions:
 apt_packages:
-  - libgmp-dev
+  - "libgmp3-dev"
 
 r_github_packages :
   - jimhester/covr
