@@ -5,7 +5,8 @@ language: r
 
 sudo: false
 
-cache : packages
+# turn this off for now:
+#cache : packages
 
 r:
   - release
