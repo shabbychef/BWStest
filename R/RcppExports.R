@@ -113,3 +113,67 @@ bws_cdf <- function(b, maxj = 5L, lower_tail = TRUE) {
     .Call('BWStest_bws_cdf', PACKAGE = 'BWStest', b, maxj, lower_tail)
 }
 
+#' @title
+#' Compute Murakami's test statistic.
+#'
+#' @description
+#'
+#' Compute one of the modified Baumgartner-Weiss-Schindler test statistics proposed
+#' by Murakami, or Neuhauser.
+#'
+#' @details
+#'
+#' Given vectors \eqn{X} and \eqn{Y}, computes \eqn{B_{jX}} and \eqn{B_{jY}} 
+#' for some \eqn{j} as described by Murakami and by Neuhauser, returning either their 
+#' their average or their average distance.
+#' The test statistics approximate the weighted square norm of the
+#' difference in CDFs of the two distributions. 
+#'
+#' The test statistic is based only on the ranks of the input. If the same
+#' monotonic transform is applied to both vectors, the result should be unchanged.
+#'
+#' The various \sQuote{flavor}s of test statistic are:
+#' \describe{
+#' \item{0}{The statistic of Baumgartner-Weiss-Schindler.}
+#' \item{1}{Murakami's \eqn{B_1} statistic, from his 2006 paper.}
+#' \item{2}{Neuhauser's difference statistic, denoted by Murakami as \eqn{B_2} in his 
+#' 2012 paper.}
+#' \item{3}{Murakami's \eqn{B_3} statistic, from his 2012 paper.}
+#' \item{4}{Murakami's \eqn{B_4} statistic, from his 2012 paper.}
+#' }
+#'
+#' @param x a vector.
+#' @param y a vector.
+#' @param flavor which \sQuote{flavor} of test statistic. 
+#' @param P a matrix, as output by \code{\link{partitions::setparts}}, consisting of
+#' 1s and 2s. Each column is a separate test, the rows correspond to the ordered elements
+#' in the grouped set, with no possibility of ties. The 1s and 2s denote which of the two
+#' samples the observation belongs to.
+#'
+#' @return The BWS test statistic, \eqn{B_j}. For \code{murakami_stat_parts}, a vector of
+#' the test statistics.
+#' @note \code{NA} and \code{NaN} not yet dealt with.
+#' @note this is NYI!
+#' @seealso \code{\link{bws_stat}}.
+#' @examples
+#'
+#' set.seed(1234)
+#' x <- runif(1000)
+#' y <- runif(100)
+#' bval <- murakami_stat(x,y,1)
+#'
+#' @template etc
+#' @template ref-bws
+#' @template ref-modtests
+#' @rdname murakami_stat
+#' @export
+murakami_stat_parts <- function(parts, flavor = 0L) {
+    .Call('BWStest_murakami_stat_parts', PACKAGE = 'BWStest', parts, flavor)
+}
+
+#' @rdname murakami_stat
+#' @export
+murakami_stat <- function(x, y, flavor = 0L) {
+    .Call('BWStest_murakami_stat', PACKAGE = 'BWStest', x, y, flavor)
+}
+

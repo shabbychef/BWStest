@@ -344,5 +344,106 @@ NumericVector bws_cdf(NumericVector b,int maxj=5,bool lower_tail=true) {
 	return retv;
 }
 
+//' @title
+//' Compute Murakami's test statistic.
+//'
+//' @description
+//'
+//' Compute one of the modified Baumgartner-Weiss-Schindler test statistics proposed
+//' by Murakami, or Neuhauser.
+//'
+//' @details
+//'
+//' Given vectors \eqn{X} and \eqn{Y}, computes \eqn{B_{jX}} and \eqn{B_{jY}} 
+//' for some \eqn{j} as described by Murakami and by Neuhauser, returning either their 
+//' their average or their average distance.
+//' The test statistics approximate the weighted square norm of the
+//' difference in CDFs of the two distributions. 
+//'
+//' The test statistic is based only on the ranks of the input. If the same
+//' monotonic transform is applied to both vectors, the result should be unchanged.
+//'
+//' The various \sQuote{flavor}s of test statistic are:
+//' \describe{
+//' \item{0}{The statistic of Baumgartner-Weiss-Schindler.}
+//' \item{1}{Murakami's \eqn{B_1} statistic, from his 2006 paper.}
+//' \item{2}{Neuhauser's difference statistic, denoted by Murakami as \eqn{B_2} in his 
+//' 2012 paper.}
+//' \item{3}{Murakami's \eqn{B_3} statistic, from his 2012 paper.}
+//' \item{4}{Murakami's \eqn{B_4} statistic, from his 2012 paper.}
+//' }
+//'
+//' @param x a vector.
+//' @param y a vector.
+//' @param flavor which \sQuote{flavor} of test statistic. 
+//' @param P a matrix, as output by \code{\link{partitions::setparts}}, consisting of
+//' 1s and 2s. Each column is a separate test, the rows correspond to the ordered elements
+//' in the grouped set, with no possibility of ties. The 1s and 2s denote which of the two
+//' samples the observation belongs to.
+//'
+//' @return The BWS test statistic, \eqn{B_j}. For \code{murakami_stat_parts}, a vector of
+//' the test statistics.
+//' @note \code{NA} and \code{NaN} not yet dealt with.
+//' @note this is NYI!
+//' @seealso \code{\link{bws_stat}}.
+//' @examples
+//'
+//' set.seed(1234)
+//' x <- runif(1000)
+//' y <- runif(100)
+//' bval <- murakami_stat(x,y,1)
+//'
+//' @template etc
+//' @template ref-bws
+//' @template ref-modtests
+//' @rdname murakami_stat
+//' @export
+// [[Rcpp::export]]
+NumericVector murakami_stat_parts(IntegerMatrix parts,int flavor=0) {
+	NumericVector B1(parts.ncol());
+	NumericVector B2(parts.ncol());
+	NumericVector Bstat(parts.ncol());
+	// ack! fill this in!
+
+	switch(flavor) {
+		case 0 : 
+
+			break;
+		case 1 :
+
+			break;
+
+		case 2 :
+
+			break;
+
+		default : 
+			stop("unknown flavor; try value in [0,4]"); 
+			break;
+	}
+	return Bstat;
+}
+//' @rdname murakami_stat
+//' @export
+// [[Rcpp::export]]
+double murakami_stat(NumericVector x,NumericVector y,int flavor=0) {
+	// put into the form to be consumed by the other function...
+	NumericVector sortx = clone(x); std::sort(sortx.begin(), sortx.end());
+	NumericVector sorty = clone(y); std::sort(sorty.begin(), sorty.end());
+	IntegerVector G = full_rank<NumericVector, double>(sorty, sortx);
+	double m = (double)y.size();
+	double n = (double)x.size();
+	double mpn = m + n;
+	IntegerMatrix parts(mpn,1);
+	int iii;
+	for (iii=0;iii<mpn;iii++) { parts(iii,0) = 2; }
+	for (iii=0;iii<m;iii++) { 
+		parts(G(iii)-1,0) = 1;
+	}
+	NumericVector Bstat = murakami_stat_parts(parts,flavor);
+	double B = Bstat(0);
+	return B;
+}
+
 //for vim modeline: (do not edit)
 // vim:ts=2:sw=2:tw=129:fdm=marker:fmr=FOLDUP,UNFOLD:cms=//%s:tags=.c_tags;:syn=cpp:ft=cpp:mps+=<\:>:ai:si:cin:nu:fo=croql:cino=p0t0c5(0:

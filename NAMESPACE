@@ -3,6 +3,8 @@
 export(bws_cdf)
 export(bws_stat)
 export(bws_test)
+export(murakami_stat)
+export(murakami_stat_parts)
 exportPattern("^[[:alpha:]]+")
 import(Rcpp)
 importFrom(Rcpp,evalCpp)
