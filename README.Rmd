@@ -262,7 +262,7 @@ print(ph)
 ```
 
 Here we replicate figure 3B of Baumgartner _et al._ We draw two samples, one from the normal distribution
-with zero mean and varianced one-twelth, the other uniformly on -0.5 to 0.5. We take equal sample sizes
+with zero mean and variance one-twelth, the other uniformly on -0.5 to 0.5. We take equal sample sizes
 from these two populations, then vary the sample size, checking the
 empirical rejection rate at the 0.05 level. Since the first two moments are equal, the Wilcoxon test
 is useless here, and not applied.
@@ -384,4 +384,189 @@ ph <- ggplot(df,aes(sample=pv)) +
 print(ph)
 ```
 
+So that's not so great. 
+
+## Under the alternative
+
+We can perform the power comparisons of Baumgartner _et al._ using the Murakami test statistics.
+Here we consider the setup of figure 2A, samples of size 10 from the normal distribution with
+equal variances but different means. Neuhauser's test is, as expected, more powerful for detecting
+this one-sided alternative, probably on par with the t-test, while the BWS test (basically equivalent
+to Murakami 1) is next, then 5, 3, 4.
+
+```{r murakami_sim_two_A,eval=TRUE,echo=TRUE}
+n.sim <- 10000
+avals <- seq(0,3.2,length.out=17)
+alpha <- 0.05
+mnsize <- 10
+
+set.seed(1234)
+simul <- sapply(avals,function(a) {
+	statvs <- replicate(n.sim,{
+		x <- rnorm(mnsize,mean=0)
+		y <- rnorm(mnsize,mean=a)
+		bws <- bws_stat(x,y)
+		murav <- sapply(1L:5L,function(flavor) {
+			murakami_stat(x,y,flavor=flavor)
+		})
+		c(bws,murav)
+	})
+	rej_bws <- mean(bws_cdf(statvs[1,],lower_tail=FALSE) <= alpha)
+	rej_mur <- sapply(2:6,function(rown) {
+		mean(murakami_cdf(statvs[rown,],mnsize,mnsize,flavor=rown-1,lower_tail=FALSE) <= alpha)
+	})
+
+	rejrate <- c(rej_bws,rej_mur)
+	names(rejrate) <- c('BWS test','Murakami 1','Neuhauser','Murakami 3','Murakami 4','Murakami 5')
+	rejrate
+},simplify='matrix')
+
+Arejrates <- data.frame(t(simul))
+Arejrates$a <- avals
+```
+```{r murakami_fig_two_A,eval=TRUE,echo=TRUE,fig.width=8.0,fig.height=4.5,out.width='700px',out.height='500px'}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+plotdf <- tidyr::gather(Arejrates,'test','rejection_rate',-a) %>%
+	dplyr::mutate(test=gsub('\\.',' ',test))
+ph <- ggplot(plotdf,aes(x=a,y=rejection_rate,group=test,colour=test)) + 
+	geom_line() + geom_point() + labs(x='a, difference in means',y='rejection rate')
+print(ph)
+```
+
+Now we consider figure2B, with two samples of equal size from the normal distribution with zero
+mean, but different standard deviations. Neuhauser's test is nearly useless here because the 
+means of the populations are equal. Murakami 3, 4, and 5 are the most powerful, followed by BWS.
+
+
+```{r murakami_sim_two_B,eval=TRUE,echo=TRUE}
+n.sim <- 10000
+svals <- seq(1,45,length.out=10)
+alpha <- 0.05
+mnsize <- 10
+
+set.seed(1234)
+simul <- sapply(svals,function(s) {
+	statvs <- replicate(n.sim,{
+		x <- rnorm(mnsize,mean=0,sd=1)
+		y <- rnorm(mnsize,mean=0,sd=s)
+		bws <- bws_stat(x,y)
+		murav <- sapply(1L:5L,function(flavor) {
+			murakami_stat(x,y,flavor=flavor)
+		})
+		c(bws,murav)
+	})
+	rej_bws <- mean(bws_cdf(statvs[1,],lower_tail=FALSE) <= alpha)
+	rej_mur <- sapply(2:6,function(rown) {
+		mean(murakami_cdf(statvs[rown,],mnsize,mnsize,flavor=rown-1,lower_tail=FALSE) <= alpha)
+	})
+
+	rejrate <- c(rej_bws,rej_mur)
+	names(rejrate) <- c('BWS test','Murakami 1','Neuhauser','Murakami 3','Murakami 4','Murakami 5')
+	rejrate
+},simplify='matrix')
+
+Brejrates <- data.frame(t(simul))
+Brejrates$sigma <- svals
+```
+```{r murakami_fig_two_B,eval=TRUE,echo=TRUE,fig.width=8.0,fig.height=4.5,out.width='700px',out.height='500px'}
+plotdf <- tidyr::gather(Brejrates,'test','rejection_rate',-sigma) %>%
+	dplyr::mutate(test=gsub('\\.',' ',test))
+ph <- ggplot(plotdf,aes(x=sigma,y=rejection_rate,group=test,colour=test)) + 
+	geom_line() + geom_point() + labs(x='sigma, ratio of standard deviations',y='rejection rate')
+print(ph)
+```
+
+Now to figure 3A, with
+two equal sized samples from the exponential distribution,
+letting _l_ be the ratio of the rate parameters of the two populations. The BWS test
+is the most powerful here, apparently.
+
+```{r murakami_sim_three_A,eval=TRUE,echo=TRUE}
+n.sim <- 10000
+lvals <- seq(1,12)
+alpha <- 0.05
+mnsize <- 10
+
+set.seed(1234)
+simul <- sapply(lvals,function(l) {
+	statvs <- replicate(n.sim,{
+		x <- rexp(mnsize,rate=1)
+		y <- rexp(mnsize,rate=l)
+		bws <- bws_stat(x,y)
+		murav <- sapply(1L:5L,function(flavor) {
+			murakami_stat(x,y,flavor=flavor)
+		})
+		c(bws,murav)
+	})
+	rej_bws <- mean(bws_cdf(statvs[1,],lower_tail=FALSE) <= alpha)
+	rej_mur <- sapply(2:6,function(rown) {
+		mean(murakami_cdf(statvs[rown,],mnsize,mnsize,flavor=rown-1,lower_tail=FALSE) <= alpha)
+	})
+
+	rejrate <- c(rej_bws,rej_mur)
+	names(rejrate) <- c('BWS test','Murakami 1','Neuhauser','Murakami 3','Murakami 4','Murakami 5')
+	rejrate
+},simplify='matrix')
+
+Crejrates <- data.frame(t(simul))
+Crejrates$lratio <- lvals
+```
+```{r murakami_fig_three_A,eval=TRUE,echo=TRUE,fig.width=8.0,fig.height=4.5,out.width='700px',out.height='500px'}
+plotdf <- tidyr::gather(Crejrates,'test','rejection_rate',-lratio) %>%
+	dplyr::mutate(test=gsub('\\.',' ',test))
+ph <- ggplot(plotdf,aes(x=lratio,y=rejection_rate,group=test,colour=test)) + 
+	geom_line() + geom_point() + labs(x='l, ratio of rate parameters',y='rejection rate')
+print(ph)
+```
+
+Now figure 3B, with a normal sample and a uniform sample, with equal first and second moments, varying
+the sample size. Because flavors 3 through 5 are not well behaved, we drop them here. Once again
+the BWS test is the most powerful. 
+
+```{r murakami_sim_three_B,eval=TRUE,echo=TRUE}
+n.sim <- 10000
+mvals <- seq(10,670,by=60)
+alpha <- 0.05
+
+set.seed(1234)
+simul <- sapply(mvals,function(mnsize) {
+	statvs <- replicate(n.sim,{
+		x <- rnorm(mnsize,mean=0,sd=1.0/sqrt(12.0))
+		y <- runif(mnsize,min=-0.5,max=0.5)
+		bws <- bws_stat(x,y)
+		murav <- sapply(1L:2L,function(flavor) {
+			murakami_stat(x,y,flavor=flavor)
+		})
+		c(bws,murav)
+	})
+	rej_bws <- mean(bws_cdf(statvs[1,],lower_tail=FALSE) <= alpha)
+	rej_mur <- sapply(2:3,function(rown) {
+		mean(murakami_cdf(statvs[rown,],mnsize,mnsize,flavor=rown-1,lower_tail=FALSE) <= alpha)
+	})
+
+	rejrate <- c(rej_bws,rej_mur)
+	names(rejrate) <- c('BWS test','Murakami 1','Neuhauser')
+	rejrate
+},simplify='matrix')
+
+Drejrates <- data.frame(t(simul))
+Drejrates$ssize <- 2 * mvals
+```
+```{r murakami_fig_three_B,eval=TRUE,echo=TRUE,fig.width=8.0,fig.height=4.5,out.width='700px',out.height='500px'}
+plotdf <- tidyr::gather(Drejrates,'test','rejection_rate',-ssize) %>%
+	dplyr::mutate(test=gsub('\\.',' ',test))
+ph <- ggplot(plotdf,aes(x=ssize,y=rejection_rate,group=test,colour=test)) + 
+	geom_line() + geom_point() + labs(x='m+n, total sample size',y='rejection rate')
+print(ph)
+```
+
+# Future work
+
+I anticipate the following:
+
+* Modifications of flavors 3 through 5 so that they converge for large
+sample sizes.
+* Use of flavor 2 (Neuhauser's test) in the `bws_test` function.
 
