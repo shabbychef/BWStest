@@ -30,6 +30,12 @@ Given the Murakami test statistic \eqn{B_j} for \eqn{0 \le j \le 5}{0 <= j <= 5}
 computes the CDF under the null that the two samples come from the same
 distribution. The CDF is computed by permutation test and memoization.
 }
+\note{
+the CDF is approximately computed by evaluating the permutations up to
+some reasonably small sample size (currently the cutoff is 9). When larger
+sample sizes are used, the distribution of the test statistic may not
+converge. This is apparently seen in flavors 3 through 5.
+}
 \examples{
 
 # basic usage:

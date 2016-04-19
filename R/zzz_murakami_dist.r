@@ -54,6 +54,10 @@
 #' @template etc
 #' @template ref-bws
 #' @template ref-modtests
+#' @note the CDF is approximately computed by evaluating the permutations up to
+#' some reasonably small sample size (currently the cutoff is 9). When larger
+#' sample sizes are used, the distribution of the test statistic may not
+#' converge. This is apparently seen in flavors 3 through 5.
 #' @examples 
 #'
 #' # basic usage:

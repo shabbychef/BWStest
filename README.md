@@ -346,9 +346,86 @@ print(ph)
 
 <img src="github_extra/figure/fig_three_B-1.png" title="plot of chunk fig_three_B" alt="plot of chunk fig_three_B" width="700px" height="500px" />
 
-## Future work
+## Murakami tests
 
-Eventually the package will support the modified tests proposed by 
 [Neuhauser](http://doai.io/10.1007/BF02762032) and 
-[Murakami](http://doai.io/10.1080/00949655.2010.551516).
+[Murakami](http://doai.io/10.1080/00949655.2010.551516) described
+some modifications to the original test of Baumgartner. Neuhauser's
+test allows one to test against directional alternatives. Murakami
+enumerated some modifications to the weighting scheme. These are
+available via the `murakami_stat` function, where the `flavor`
+corresponds to the test number from Murakami's paper, namely
+
+* 0 corresponds to the original BWS statistic.
+* 1 corresponds to Murakami's first modification.
+* 2 corresponds to Neuhauser's statistic, which can take negative values.
+* 3 through 5 correspond to different weighting schemes of Murakami's.
+
+Here we take these through the paces as above.
+
+### Under the null
+
+As above, we draw samples under the null and compare to the putative
+CDF function
+
+
+```r
+require(BWStest)
+
+# now compute a bunch under the null:
+n1 <- 9
+n2 <- n1
+set.seed(1234)
+allpvs <- lapply(0L:5L, function(flavor) {
+    bvals <- replicate(5000, murakami_stat(rnorm(n1), 
+        rnorm(n2), flavor = flavor))
+    # compute the approximate p-values under the null:
+    pvals <- murakami_cdf(bvals, n1 = n1, n2 = n2, 
+        flavor = flavor)
+    data.frame(pv = pvals, flavor = flavor)
+})
+
+df <- do.call(rbind, allpvs)
+
+require(ggplot2)
+ph <- ggplot(df, aes(sample = pv)) + facet_grid(flavor ~ 
+    .) + stat_qq(distribution = stats::qunif)
+print(ph)
+```
+
+<img src="github_extra/figure/murakami_null-1.png" title="plot of chunk murakami_null" alt="plot of chunk murakami_null" width="500px" height="600px" />
+
+While these all look fine, they are based on small sample sizes. The CDF is approximated by evaluating
+all the permutations (with memoisation to tame the computational requirements), but this can only be
+done up to some reasonably small sample size. If the test statistic does not converge beyond that
+sample size, the CDF approximation will not be accurate. This appears to be the case for flavors 3 through 5,
+as demonstrated below:
+
+
+```r
+require(BWStest)
+
+# now compute a bunch under the null:
+n1 <- 50
+n2 <- n1
+set.seed(1234)
+allpvs <- lapply(0L:5L, function(flavor) {
+    bvals <- replicate(5000, murakami_stat(rnorm(n1), 
+        rnorm(n2), flavor = flavor))
+    # compute the approximate p-values under the null:
+    pvals <- murakami_cdf(bvals, n1 = n1, n2 = n2, 
+        flavor = flavor)
+    data.frame(pv = pvals, flavor = flavor)
+})
+
+df <- do.call(rbind, allpvs)
+
+require(ggplot2)
+ph <- ggplot(df, aes(sample = pv)) + facet_grid(flavor ~ 
+    .) + stat_qq(distribution = stats::qunif)
+print(ph)
+```
+
+<img src="github_extra/figure/murakami_null_2-1.png" title="plot of chunk murakami_null_2" alt="plot of chunk murakami_null_2" width="500px" height="600px" />
+
 
