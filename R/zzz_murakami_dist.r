@@ -16,19 +16,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with BWStest.  If not, see <http://www.gnu.org/licenses/>.
 
-.murakami_all_stats <- function(n1,n2,flavor) {
-		Parts <- partitions::setparts(c(n1,n2))
-		if (n1 == n2) { 
-			allem <- murakami_stat_parts(cbind(Parts,3-Parts),flavor)
-		} else if (n2 > n1) {
-			allem <- murakami_stat_parts(3-Parts,flavor)
-		} else {
-			allem <- murakami_stat_parts(Parts,flavor)
-		}
-		allem
-}
-
-.murakami_memo_stats <- memoise::memoise(.murakami_all_stats)
+.murakami_memo_stats <- memoise::memoise(murakami_stat_perms)
 
 #' @title Murakami test statistic distribution.
 #'
@@ -83,7 +71,7 @@
 murakami_cdf <- function(B, n1, n2, flavor=0L, lower_tail=TRUE) {
 	# errors on flavor can come later, but this is important here:
 	stopifnot(n1 > 0,n2 > 0)
-	CUTOFF <- 9
+	CUTOFF <- 11 
 	allv <- .murakami_memo_stats(min(CUTOFF,n1),min(CUTOFF,n2),flavor)
 
 	# normal approximation when beyond CUTOFF?

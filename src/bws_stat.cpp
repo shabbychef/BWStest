@@ -1,4 +1,3 @@
-
 /*
  
   This file is part of BWStest.
@@ -40,6 +39,7 @@
 #define __DEF_BWS_STAT__
 
 #include <math.h>
+#include "util.h"
 
 // 2FIX: deal with NA/NAN here?
 #define MAX(a,b) ((a>b)? (a):(b))
@@ -49,124 +49,6 @@
 
 #include <Rcpp.h>
 using namespace Rcpp;
-
-// return number of elements in sortx[lo:hi) <= val
-// or lo - 1 if none.
-// these are C indexed, so you should have
-// lo = 0 and hi = length(sortx) to do the
-// whole vector.
-template <typename T,typename D,bool comp_with_eq>
-int bin_search_lstar(T sortx, D val, const int lo, const int hi) {
-	int kidx;
-	int ilo=lo;
-	int ihi=hi;
-
-	if (ilo < 0) { stop("out of bounds"); }
-
-	while (ilo < ihi) {
-		kidx = (ilo + ihi) / 2;
-
-		if (comp_with_eq) {
-			if (val <= sortx[kidx]) {
-				ihi = kidx;
-			} else {
-				ilo = kidx + 1;
-			}
-		} else {
-			if (val < sortx[kidx]) {
-				ihi = kidx;
-			} else {
-				ilo = kidx + 1;
-			}
-		}
-	}
-	return ilo - 1;
-}
-
-// for each val in y, 
-// return number of elements in sortx[lo:hi) <= val
-// or lo - 1 if none.
-// these are C indexed, so you should have
-// lo = 0 and hi = length(sortx) to do the
-// whole vector.
-template <typename T,typename D,bool comp_with_eq>
-IntegerVector zip_index_lstar(T sortx, T refy, const int lo, const int hi) {
-	int kidx;
-	int xidx, yidx, lastv;
-	int ynel = refy.length();
-	IntegerVector retv(ynel);
-
-	if (ynel == 1) {
-		retv[0] = bin_search_lstar<T,D,comp_with_eq>(sortx, refy[0], lo, hi);
-	} else {
-		if (lo < 0) { stop("out of bounds"); }
-		xidx = lo;
-		yidx = 0;
-		if (comp_with_eq) {
-
-			while ((xidx < hi) && (yidx < ynel)) {
-				if (sortx[xidx] <= refy[yidx]) {
-					xidx++;
-				} else {
-					retv[yidx] = xidx - 1;
-					yidx++;
-				}
-			}
-
-		} else {
-
-			while ((xidx < hi) && (yidx < ynel)) {
-				if (sortx[xidx] < refy[yidx]) {
-					xidx++;
-				} else {
-					retv[yidx] = xidx - 1;
-					yidx++;
-				}
-			}
-
-		} 
-		lastv = xidx - 1;
-		while (yidx < ynel) {
-			retv[yidx] = lastv;
-			yidx++;
-		}
-	}
-
-	return retv;
-}
-
-//2FIX: this is a stupid hacky way to compute this.
-//smarter would be to modify zip_index_lstar to 
-//do the addition for you?
-//ah, but ties, right.
-// given sorted x and sorted y, for each element in y
-// find the number of elements in union(x,y) less than
-// or equal to it. that is
-// retv[i] = # { z in union(x,y) | z <= y[i] } for 1 <= i <= length(y)
-template <typename T,typename D>
-IntegerVector full_rank(T sortx, T sorty) {
-	IntegerVector retv;
-	retv = 2 + zip_index_lstar<T, D, true>(sortx, sorty, 0, sortx.length()) +
-		zip_index_lstar<T, D, true>(sorty, sorty, 0, sorty.length());
-	return retv;
-}
-
-/*
- 
-set.seed(1234)
-x <- rnorm(1000)
-y <- rnorm(1000)
-stopifnot(all(unlist(lapply(sort(x),function(anx) { sum(c(x,y) <= anx) })) == fool(x,y)))
-
-//// [[Rcpp::export]]
-//IntegerVector fool(NumericVector x,NumericVector y) {
-	//NumericVector sortx = clone(x); std::sort(sortx.begin(), sortx.end());
-	//NumericVector sorty = clone(y); std::sort(sorty.begin(), sorty.end());
-	//IntegerVector G = full_rank<NumericVector, double>(sorty, sortx);
-	//return G;
-//}
-
- */
 
 //' @title
 //' Compute the test statistic of the Baumgartner-Weiss-Schindler test.

@@ -30,18 +30,6 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// murakami_stat_parts
-NumericVector murakami_stat_parts(IntegerMatrix Parts, int flavor);
-RcppExport SEXP BWStest_murakami_stat_parts(SEXP PartsSEXP, SEXP flavorSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< IntegerMatrix >::type Parts(PartsSEXP);
-    Rcpp::traits::input_parameter< int >::type flavor(flavorSEXP);
-    __result = Rcpp::wrap(murakami_stat_parts(Parts, flavor));
-    return __result;
-END_RCPP
-}
 // murakami_stat
 double murakami_stat(NumericVector x, NumericVector y, int flavor);
 RcppExport SEXP BWStest_murakami_stat(SEXP xSEXP, SEXP ySEXP, SEXP flavorSEXP) {
@@ -52,6 +40,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
     Rcpp::traits::input_parameter< int >::type flavor(flavorSEXP);
     __result = Rcpp::wrap(murakami_stat(x, y, flavor));
+    return __result;
+END_RCPP
+}
+// murakami_stat_perms
+NumericVector murakami_stat_perms(int nx, int ny, int flavor);
+RcppExport SEXP BWStest_murakami_stat_perms(SEXP nxSEXP, SEXP nySEXP, SEXP flavorSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< int >::type nx(nxSEXP);
+    Rcpp::traits::input_parameter< int >::type ny(nySEXP);
+    Rcpp::traits::input_parameter< int >::type flavor(flavorSEXP);
+    __result = Rcpp::wrap(murakami_stat_perms(nx, ny, flavor));
     return __result;
 END_RCPP
 }

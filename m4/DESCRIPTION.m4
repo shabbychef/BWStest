@@ -16,7 +16,6 @@ Description: Performs the 'Baumgartner-Weiss-Schindler' two-sample test of equal
    probability distributions.
 License: LGPL-3
 Imports:
-    partitions,
     memoise,
     Rcpp (>= 0.12.3)
 LinkingTo: Rcpp

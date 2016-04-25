@@ -143,18 +143,15 @@ bws_cdf <- function(b, maxj = 5L, lower_tail = TRUE) {
 #' \item{5}{Murakami's \eqn{B_5} statistic, from his 2012 paper, with a log weighting.}
 #' }
 #'
-#' @param x a vector.
-#' @param y a vector.
+#' @param x a vector of the first sample.
+#' @param y a vector of the second sample.
 #' @param flavor which \sQuote{flavor} of test statistic. 
-#' @param Parts a matrix, as output by \code{\link{setparts}}, consisting of
-#' 1s and 2s. Each column is a separate test, the rows correspond to the ordered elements
-#' in the grouped set, with no possibility of ties. The 1s and 2s denote which of the two
-#' samples the observation belongs to.
+#' @param nx the length of \code{x}, the first sample.
+#' @param ny the length of \code{y}, the second sample.
 #'
-#' @return The BWS test statistic, \eqn{B_j}. For \code{murakami_stat_parts}, a vector of
-#' the test statistics.
-#' @note \code{NA} and \code{NaN} not yet dealt with.
-#' @note this is NYI!
+#' @return The BWS test statistic, \eqn{B_j}. For \code{murakami_stat_perms}, a vector of
+#' the test statistics for \emph{all} permutations of the input.
+#' @note \code{NA} and \code{NaN} are not yet dealt with!
 #' @seealso \code{\link{bws_stat}}.
 #' @examples
 #'
@@ -164,19 +161,15 @@ bws_cdf <- function(b, maxj = 5L, lower_tail = TRUE) {
 #' bval <- murakami_stat(x,y,1)
 #'
 #' \dontrun{
-#' if (require(partitions)) {
-#'   nx <- 6
-#'   ny <- 5
-#'   # monte carlo
-#'   set.seed(1234)
-#'   repli <- replicate(3000,murakami_stat(rnorm(nx),rnorm(ny),0L))
-#'   # under the null, perform the permutation test:
-#'   P <- partitions::setparts(c(nx,ny))
-#'   if (nx == ny) { allem <- murakami_stat_parts(cbind(P,3-P),0L) 
-#'   } else { allem <- murakami_stat_parts(P,0L) }
-#'   plot(ecdf(allem)) 
-#'   lines(ecdf(repli),col='red') 
-#' }
+#' nx <- 6
+#' ny <- 5
+#' # monte carlo
+#' set.seed(1234)
+#' repli <- replicate(3000,murakami_stat(rnorm(nx),rnorm(ny),0L))
+#' # under the null, perform the permutation test:
+#' allem <- murakami_stat_perms(nx,ny,0L)
+#' plot(ecdf(allem)) 
+#' lines(ecdf(repli),col='red') 
 #' }
 #'
 #' @template etc
@@ -184,13 +177,13 @@ bws_cdf <- function(b, maxj = 5L, lower_tail = TRUE) {
 #' @template ref-modtests
 #' @rdname murakami_stat
 #' @export
-murakami_stat_parts <- function(Parts, flavor = 0L) {
-    .Call('BWStest_murakami_stat_parts', PACKAGE = 'BWStest', Parts, flavor)
+murakami_stat <- function(x, y, flavor = 0L) {
+    .Call('BWStest_murakami_stat', PACKAGE = 'BWStest', x, y, flavor)
 }
 
 #' @rdname murakami_stat
 #' @export
-murakami_stat <- function(x, y, flavor = 0L) {
-    .Call('BWStest_murakami_stat', PACKAGE = 'BWStest', x, y, flavor)
+murakami_stat_perms <- function(nx, ny, flavor = 0L) {
+    .Call('BWStest_murakami_stat_perms', PACKAGE = 'BWStest', nx, ny, flavor)
 }
 

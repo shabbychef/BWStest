@@ -59,7 +59,8 @@ test_that("murakami computations",{#FOLDUP
 	set.char.seed("f1a7627e-3545-4fdf-a5bf-10cf9a4bb396")
 	for (flavor in 0:5) {
 		statv <- murakami_stat(rnorm(10),rnorm(10),flavor)
-		allev <- murakami_stat_parts(partitions::setparts(c(3,3)),flavor)
+		allev <- murakami_stat_perms(3,3,flavor)
+		allev <- murakami_stat_perms(6,3,flavor)
 	}
 	expect_error(statv <- murakami_stat(rnorm(10),rnorm(10),flavor=-1))
 	expect_error(statv <- murakami_stat(rnorm(10),rnorm(10),flavor=6))
