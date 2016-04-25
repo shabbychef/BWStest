@@ -89,6 +89,8 @@ NumericVector murakami_pre_B(const size_t N,const size_t nx,IntegerVector parts,
 				parts(iii+1) = parts(iii)+1;
 			}
 		}
+		// just to be sure we have prealloc'ed with zeros:
+		B1(jjj) = 0.0;
 		for (iii=1;iii<=nx;iii++) {
 			nnn = parts(iii-1);
 			nonce = iii / nxp1;
@@ -243,7 +245,7 @@ double murakami_stat(NumericVector x,NumericVector y,int flavor=0) {
 
 	switch(flavor) {
 		case 2:
-			B = 0.5 * (B1(0) - B2(0));
+			B = 0.5 * (B2(0) - B1(0));
 			break;
 		default:
 			B = 0.5 * (B1(0) + B2(0));
@@ -268,11 +270,11 @@ NumericVector murakami_stat_perms(int nx, int ny,int flavor=0) {
 		// combine them;
 		if (flavor == 2) {
 			for (iii=0;iii < nlen;iii++) {
-				B(iii) = 0.5 * (B1(iii) - B1(nlen-iii-1));
+				B(iii) = 0.5 * (B1(nlen-iii-1) - B1(iii));
 			}
 		} else {
 			for (iii=0;iii < nlen;iii++) {
-				B(iii) = 0.5 * (B1(iii) + B1(nlen-iii-1));
+				B(iii) = 0.5 * (B1(nlen-iii-1) + B1(iii));
 			}
 		}
 	} else {
@@ -280,11 +282,11 @@ NumericVector murakami_stat_perms(int nx, int ny,int flavor=0) {
 		// combine them;
 		if (flavor == 2) {
 			for (iii=0;iii < nlen;iii++) {
-				B(iii) = 0.5 * (B1(iii) - B2(nlen-iii-1));
+				B(iii) = 0.5 * (B2(nlen-iii-1) - B1(iii));
 			}
 		} else {
 			for (iii=0;iii < nlen;iii++) {
-				B(iii) = 0.5 * (B1(iii) + B2(nlen-iii-1));
+				B(iii) = 0.5 * (B2(nlen-iii-1) + B1(iii));
 			}
 		}
 	}
@@ -304,6 +306,71 @@ NumericVector murakami_stat_perms(int nx, int ny,int flavor=0) {
 // the takeaway is that we are much faster now. yay.
 // 
 //
+
+/*
+
+		 3/2 split:
+ 
+		 123 45
+		 124 35
+		 125 34
+		 134 25
+		 135 24
+		 145 23
+		 234 15
+		 235 14
+		 245 13
+		 345 12
+
+
+		 2/3 split:
+
+		 12 345
+		 13 245
+		 14 235
+		 15 234
+		 23 145
+		 24 135
+		 25 134
+		 34 124
+		 35 124
+		 45 123
+
+		 require(partitions)
+		 M <- partitions::setparts(c(9,6)) 
+		 allem <- sapply(seq_len(ncol(M)),function(ccc) {
+		 		xv <- which(M[,ccc] == 1)
+		 		yv <- which(M[,ccc] == 2)
+				murakami_stat(xv,yv,flavor=2)
+		 })
+
+		 require(partitions)
+		 M <- partitions::setparts(c(3,2)) 
+		 allem <- sapply(seq_len(ncol(M)),function(ccc) {
+		 		xv <- which(M[,ccc] == 1)
+		 		yv <- which(M[,ccc] == 2)
+				murakami_stat(xv,yv,flavor=2)
+		 })
+
+		 sort(allem)
+
+		 fooz <- c(murakami_stat(c(1,2,3),c(4,5),flavor=2),
+		 murakami_stat(c(1,2,4),c(3,5),flavor=2),
+		 murakami_stat(c(1,2,5),c(3,4),flavor=2),
+		 murakami_stat(c(1,3,4),c(2,5),flavor=2),
+		 murakami_stat(c(1,3,5),c(2,4),flavor=2),
+		 murakami_stat(c(1,4,5),c(2,3),flavor=2),
+		 murakami_stat(c(2,3,4),c(1,5),flavor=2),
+		 murakami_stat(c(2,3,5),c(1,4),flavor=2),
+		 murakami_stat(c(2,4,5),c(1,3),flavor=2),
+		 murakami_stat(c(3,4,5),c(1,2),flavor=2))
+
+	sort(fooz) - sort(allem)
+	sort(murakami_stat_perms(3,2,flavor=2)) 
+
+
+
+ */
 
 
 //for vim modeline: (do not edit)
