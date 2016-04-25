@@ -348,7 +348,7 @@ test_that("murakami_cdf matches (other) table 1",{#FOLDUP
 			#if (is.character(all.equal(alpha,ourv,tolerance=1e-4,scale=1))) {
 				#cat(sprintf('nomatch: B3 %d %d %f: %f != %f\n',nx,ny,b3val,alpha,ourv))
 			#}
-			#expect_equal(alpha,ourv,tolerance=1e-4,scale=1) 
+			##expect_equal(alpha,ourv,tolerance=1e-4,scale=1) 
 
 			#alpha <- tab1[iii,7]
 			#b4val <- tab1[iii,8]
@@ -356,7 +356,7 @@ test_that("murakami_cdf matches (other) table 1",{#FOLDUP
 			#if (is.character(all.equal(alpha,ourv,tolerance=1e-4,scale=1))) {
 				#cat(sprintf('nomatch: B4 %d %d %f: %f != %f\n',nx,ny,b4val,alpha,ourv))
 			#}
-			#expect_equal(alpha,ourv,tolerance=1e-4,scale=1) 
+			##expect_equal(alpha,ourv,tolerance=1e-4,scale=1) 
 		}
 	}
 

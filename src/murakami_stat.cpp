@@ -54,26 +54,42 @@ using namespace Rcpp;
 // and compute a bunch of the Murakami B_fx statistics,
 // for f=0,1,2,3,4,5, set by the 'flavor'. We increment
 // through a bunch of sample_sets for efficiency.
-template <int flavor>
-NumericVector murakami_pre_B(const size_t N,const size_t nx,IntegerVector parts,const size_t numits) {
-	const size_t ny = N - nx;
+//
+// later make this back to a template to squeeze out the last bits of efficiency?
+//template <int flavor>
+//NumericVector murakami_pre_B(const size_t N,const size_t nx,IntegerVector parts,const size_t numits) {
+NumericVector murakami_pre_B(const size_t N,const size_t nx,IntegerVector parts,const size_t numits,const int flavor) {
+	if ((flavor < 0) || (flavor > 5)) { stop("unssuported flavor."); }
 	int iii,jjj,nnn;
 	double evx,vvx,Np1,nxp1;
 	double nonce,npart,dpart,bplus;
 	// preallocate
 	NumericVector B1(numits);
+	const int ny = N - nx;
 
-	Np1  = N + 1;
-	nxp1 = nx + 1;
+	Np1  = (double)N + 1.0;
+	nxp1 = (double)nx + 1.0;
 
-	if ((flavor == 0) || (flavor == 2)) {
-		evx = N / nx;
-		vvx = ny * N;
+	switch(flavor) {
+		case 0:
+		case 2:
+			evx = ((double)N) / (double)nx;
+			vvx = (double)ny * evx;
+			break;
+		default:
+			evx = Np1 / nxp1;
+			vvx = ((double)ny * Np1) / ((double)nx + 2.0);
+			break;
 	}
-	if ((flavor == 1) || (flavor == 3) || (flavor == 4) || (flavor == 5)) {
-		evx = Np1 / nxp1;
-		vvx = ny * Np1 / (nx + 2);
-	}
+
+	//if ((flavor == 0) || (flavor == 2)) {
+		//evx = (double)N / (double)nx;
+		//vvx = (double)ny * evx;
+	//}
+	//if ((flavor == 1) || (flavor == 3) || (flavor == 4) || (flavor == 5)) {
+		//evx = Np1 / nxp1;
+		//vvx = (double)ny * Np1 / ((double)nx + 2.0);
+	//}
 	for (jjj=0;jjj<numits;jjj++) {
 		// for more on partitions nonsense, see also:
 		// http://howardhinnant.github.io/combinations.html
@@ -93,59 +109,80 @@ NumericVector murakami_pre_B(const size_t N,const size_t nx,IntegerVector parts,
 		B1(jjj) = 0.0;
 		for (iii=1;iii<=nx;iii++) {
 			nnn = parts(iii-1);
-			nonce = iii / nxp1;
-			npart = (nnn - evx * iii);
-			dpart = (nonce * (1.0 - nonce) * vvx);
-			// template will optimize these
-			if (flavor == 0) {
-				bplus = npart * npart / dpart;
+			npart = ((double)nnn - evx * (double)iii);
+			nonce = ((double)iii) / nxp1;
+			dpart = ((nonce * (1.0 - nonce)) * vvx);
+
+			switch(flavor) {
+				case 0:
+				case 1:
+					bplus = npart * npart / dpart;
+					break;
+				case 2:
+					bplus = (npart * abs(npart)) / dpart;
+					break;
+				case 3:
+					bplus = npart * npart / (dpart * dpart);
+					break;
+				case 4:
+					bplus = abs(npart) / (dpart * dpart);
+					break;
+				case 5:
+					bplus = npart * npart / log(dpart);
+					break;
 			}
-			if (flavor == 1) {
-				bplus = (1.0 / nx) * npart * npart / dpart;
-			}
-			if (flavor == 2) {
-				bplus = npart * abs(npart) / dpart;
-			}
-			if (flavor == 3) {
-				bplus = (1.0 / nx) * npart * npart / (dpart * dpart);
-			}
-			if (flavor == 4) {
-				bplus = (1.0 / nx) * abs(npart) / (dpart * dpart);
-			}
-			if (flavor == 5) {
-				bplus = (1.0 / nx) * npart * npart / log(dpart);
-			}
-			B1(jjj) += bplus;
+
+			//// template will optimize these
+			//if (flavor == 0) {
+				//bplus = npart * npart / dpart;
+			//}
+			//if (flavor == 1) {
+				//bplus = npart * npart / dpart;
+			//}
+			//if (flavor == 2) {
+				//bplus = npart * abs(npart) / dpart;
+			//}
+			//if (flavor == 3) {
+				//bplus = npart * npart / (dpart * dpart);
+			//}
+			//if (flavor == 4) {
+				//bplus = abs(npart) / (dpart * dpart);
+			//}
+			//if (flavor == 5) {
+				//bplus = npart * npart / log(dpart);
+			//}
+			B1(jjj) += bplus / ((double) nx);
 		}
 	}
 	return B1;
 }
 
-// same interface, not templated, supposedly faster because of it
-NumericVector murakami_B(const size_t N,const size_t nx,IntegerVector parts,const size_t numits,int flavor) {
-	NumericVector B1;
-	switch(flavor) {
-		case 0:
-			B1 = murakami_pre_B<0>(N,nx,parts,numits);
-			break;
-		case 1:
-			B1 = murakami_pre_B<1>(N,nx,parts,numits);
-			break;
-		case 2:
-			B1 = murakami_pre_B<2>(N,nx,parts,numits);
-			break;
-		case 3:
-			B1 = murakami_pre_B<3>(N,nx,parts,numits);
-			break;
-		case 4:
-			B1 = murakami_pre_B<4>(N,nx,parts,numits);
-			break;
-		case 5:
-			B1 = murakami_pre_B<5>(N,nx,parts,numits);
-			break;
-	}
-	return B1;
-}
+//// from when it was templated...
+//// same interface, not templated, supposedly faster because of it
+//NumericVector murakami_B(const size_t N,const size_t nx,IntegerVector parts,const size_t numits,int flavor) {
+	//NumericVector B1;
+	//switch(flavor) {
+		//case 0:
+			//B1 = murakami_pre_B<0>(N,nx,parts,numits);
+			//break;
+		//case 1:
+			//B1 = murakami_pre_B<1>(N,nx,parts,numits);
+			//break;
+		//case 2:
+			//B1 = murakami_pre_B<2>(N,nx,parts,numits);
+			//break;
+		//case 3:
+			//B1 = murakami_pre_B<3>(N,nx,parts,numits);
+			//break;
+		//case 4:
+			//B1 = murakami_pre_B<4>(N,nx,parts,numits);
+			//break;
+		//case 5:
+			//B1 = murakami_pre_B<5>(N,nx,parts,numits);
+			//break;
+	//}
+	//return B1;
+//}
 
 //library(Rcpp)
 //sourceCpp('murakami_stat.cpp')
@@ -159,7 +196,7 @@ NumericVector murakami_many_B(const int N,const int nx,int flavor) {
 		parts[iii]=iii+1;
 	}
 	size_t numits = (size_t)Combinatorics::bincoef[N][nx];
-	return murakami_B(N,nx,parts,numits,flavor);
+	return murakami_pre_B(N,nx,parts,numits,flavor);
 }
 
 //' @title
@@ -239,8 +276,8 @@ double murakami_stat(NumericVector x,NumericVector y,int flavor=0) {
 	const size_t ny = (size_t)y.size();
 	const size_t N = nx + ny;
 
-	NumericVector B1 = murakami_B(N,nx,G,1,flavor);
-	NumericVector B2 = murakami_B(N,ny,H,1,flavor);
+	NumericVector B1 = murakami_pre_B(N,nx,G,1,flavor);
+	NumericVector B2 = murakami_pre_B(N,ny,H,1,flavor);
 	double B;
 
 	switch(flavor) {
