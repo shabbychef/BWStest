@@ -171,209 +171,309 @@ using namespace Rcpp;
 //' @template ref-modtests
 //' @rdname murakami_stat
 //' @export
-// [[Rcpp::export]]
-NumericVector murakami_stat_parts(IntegerMatrix Parts,int flavor=0) {
-	int nc=Parts.ncol();
-	int N=Parts.nrow();
-	int nx,ny;
-	int iii,jjj;
-	int xcount,ycount;
-	double evx,evy,vvx,vvy,Np1,nxp1,nxp2,nyp1,nyp2;
-	double nonce,npart,dpart,bplus;
-	NumericVector B1(nc);
-	NumericVector B2(nc);
-	NumericVector Bstat(nc);
+//NumericVector murakami_stat_parts(IntegerMatrix Parts,int flavor=0) {
+	//int nc=Parts.ncol();
+	//int N=Parts.nrow();
+	//int nx,ny;
+	//int iii,jjj;
+	//int xcount,ycount;
+	//double evx,evy,vvx,vvy,Np1,nxp1,nxp2,nyp1,nyp2;
+	//double nonce,npart,dpart,bplus;
+	//NumericVector B1(nc);
+	//NumericVector B2(nc);
+	//NumericVector Bstat(nc);
 
-	Np1  = N + 1;
+	//Np1  = N + 1;
 
-	for (jjj=0;jjj<nc;jjj++) {
-		// prealloc just to make sure:
-		B1(jjj) = 0.0;
-		B2(jjj) = 0.0;
+	//for (jjj=0;jjj<nc;jjj++) {
+		//// prealloc just to make sure:
+		//B1(jjj) = 0.0;
+		//B2(jjj) = 0.0;
 
-		// compute the number in x and y, essentially.
-		nx = 0;
-		for (iii=0;iii<N;iii++) {
-			if (Parts(iii,jjj) == 1) { nx++; }
-		}
-		ny = N - nx;
+		//// compute the number in x and y, essentially.
+		//nx = 0;
+		//for (iii=0;iii<N;iii++) {
+			//if (Parts(iii,jjj) == 1) { nx++; }
+		//}
+		//ny = N - nx;
 
-		nxp1 = nx + 1;
-		nyp1 = ny + 1;
+		//nxp1 = nx + 1;
+		//nyp1 = ny + 1;
 
-		switch(flavor) {
-			case 0 :
-			case 2 :
-				evx = N / nx;
-				evy = N / ny;
-				vvx = ny * N;
-				vvy = nx * N;
-				break ;
-			case 1 :
-			case 3 :
-			case 4 :
-			case 5 :
-				nxp2 = nx + 2;
-				nyp2 = ny + 2;
-				evx = Np1 / nxp1;
-				evy = Np1 / nyp1;
-				vvx = ny * Np1 / nxp2;
-				vvy = nx * Np1 / nyp2;
-				break ;
-			default : 
-				stop("unknown flavor; try value in [0,1,2,3,4,5]"); 
-				break;
-		}
+		//switch(flavor) {
+			//case 0 :
+			//case 2 :
+				//evx = N / nx;
+				//evy = N / ny;
+				//vvx = ny * N;
+				//vvy = nx * N;
+				//break ;
+			//case 1 :
+			//case 3 :
+			//case 4 :
+			//case 5 :
+				//nxp2 = nx + 2;
+				//nyp2 = ny + 2;
+				//evx = Np1 / nxp1;
+				//evy = Np1 / nyp1;
+				//vvx = ny * Np1 / nxp2;
+				//vvy = nx * Np1 / nyp2;
+				//break ;
+			//default : 
+				//stop("unknown flavor; try value in [0,1,2,3,4,5]"); 
+				//break;
+		//}
 
-		xcount = 0;
-		ycount = 0;
+		//xcount = 0;
+		//ycount = 0;
 
-		// subtle hint: templating could be your friend here..
-		for (iii=0;iii<N;iii++) {
-			if (Parts(iii,jjj) == 1) {
-				xcount++;
-				nonce = xcount / (nxp1);
-				npart = ((iii+1) - evx * xcount);
-				dpart = (nonce * (1.0 - nonce) * vvx);
-				switch(flavor) {
-					case 0:
-						bplus = npart * npart / dpart;
-						break;
-					case 1:
-						bplus = (1.0 / nx) * npart * npart / dpart;
-						break;
-					case 2:
-						bplus = npart * abs(npart) / dpart;
-						break;
-					case 3:
-						bplus = (1.0 / nx) * npart * npart / (dpart * dpart);
-						break;
-					case 4:
-						bplus = (1.0 / nx) * abs(npart) / (dpart * dpart);
-						break;
-					case 5:
-						bplus = (1.0 / nx) * npart * npart / log(dpart);
-						break;
-				}
-				B1(jjj) += bplus;
-			} else {
-				ycount++;
-				nonce = ycount / (nyp1);
-				npart = ((iii+1) - evy * ycount);
-				dpart = (nonce * (1.0 - nonce) * vvy);
-				switch(flavor) {
-					case 0:
-						bplus = npart * npart / dpart;
-						break;
-					case 1:
-						bplus = (1.0 / ny) * npart * npart / dpart;
-						break;
-					case 2:
-						bplus = npart * abs(npart) / dpart;
-						break;
-					case 3:
-						bplus = (1.0 / ny) * npart * npart / (dpart * dpart);
-						break;
-					case 4:
-						bplus = (1.0 / ny) * abs(npart) / (dpart * dpart);
-						break;
-					case 5:
-						bplus = (1.0 / ny) * npart * npart / log(dpart);
-						break;
-				}
-				B2(jjj) += bplus;
-			}
-		}
-	}
+		//// subtle hint: templating could be your friend here..
+		//for (iii=0;iii<N;iii++) {
+			//if (Parts(iii,jjj) == 1) {
+				//xcount++;
+				//nonce = xcount / (nxp1);
+				//npart = ((iii+1) - evx * xcount);
+				//dpart = (nonce * (1.0 - nonce) * vvx);
+				//switch(flavor) {
+					//case 0:
+						//bplus = npart * npart / dpart;
+						//break;
+					//case 1:
+						//bplus = (1.0 / nx) * npart * npart / dpart;
+						//break;
+					//case 2:
+						//bplus = npart * abs(npart) / dpart;
+						//break;
+					//case 3:
+						//bplus = (1.0 / nx) * npart * npart / (dpart * dpart);
+						//break;
+					//case 4:
+						//bplus = (1.0 / nx) * abs(npart) / (dpart * dpart);
+						//break;
+					//case 5:
+						//bplus = (1.0 / nx) * npart * npart / log(dpart);
+						//break;
+				//}
+				//B1(jjj) += bplus;
+			//} else {
+				//ycount++;
+				//nonce = ycount / (nyp1);
+				//npart = ((iii+1) - evy * ycount);
+				//dpart = (nonce * (1.0 - nonce) * vvy);
+				//switch(flavor) {
+					//case 0:
+						//bplus = npart * npart / dpart;
+						//break;
+					//case 1:
+						//bplus = (1.0 / ny) * npart * npart / dpart;
+						//break;
+					//case 2:
+						//bplus = npart * abs(npart) / dpart;
+						//break;
+					//case 3:
+						//bplus = (1.0 / ny) * npart * npart / (dpart * dpart);
+						//break;
+					//case 4:
+						//bplus = (1.0 / ny) * abs(npart) / (dpart * dpart);
+						//break;
+					//case 5:
+						//bplus = (1.0 / ny) * npart * npart / log(dpart);
+						//break;
+				//}
+				//B2(jjj) += bplus;
+			//}
+		//}
+	//}
 
-	// combine them. usually the average.
-	switch(flavor) {
-		case 2 : 
-			Bstat = 0.5 * (B2 - B1);
-			break;
-		default :
-			Bstat = 0.5 * (B1 + B2);
-			break;
-	}
-	return Bstat;
-}
+	//// combine them. usually the average.
+	//switch(flavor) {
+		//case 2 : 
+			//Bstat = 0.5 * (B2 - B1);
+			//break;
+		//default :
+			//Bstat = 0.5 * (B1 + B2);
+			//break;
+	//}
+	//return Bstat;
+//}
 //' @rdname murakami_stat
 //' @export
-// [[Rcpp::export]]
-double murakami_stat(NumericVector x,NumericVector y,int flavor=0) {
-	// put into the form to be consumed by the other function...
-	NumericVector sortx = clone(x); std::sort(sortx.begin(), sortx.end());
-	NumericVector sorty = clone(y); std::sort(sorty.begin(), sorty.end());
-	IntegerVector G = full_rank<NumericVector, double>(sorty, sortx);
-	int n = x.size();
-	int N = n + y.size();
-	IntegerMatrix parts(N,1);
-	int iii;
-	for (iii=0;iii<N;iii++) { parts(iii,0) = 2; }
-	for (iii=0;iii<n;iii++) { 
-		parts(G(iii)-1,0) = 1;
-	}
-	NumericVector Bstat = murakami_stat_parts(parts,flavor);
-	double B = Bstat(0);
-	return B;
-}
+//double murakami_stat(NumericVector x,NumericVector y,int flavor=0) {
+	//// put into the form to be consumed by the other function...
+	//NumericVector sortx = clone(x); std::sort(sortx.begin(), sortx.end());
+	//NumericVector sorty = clone(y); std::sort(sorty.begin(), sorty.end());
+	//IntegerVector G = full_rank<NumericVector, double>(sorty, sortx);
+	//int n = x.size();
+	//int N = n + y.size();
+	//IntegerMatrix parts(N,1);
+	//int iii;
+	//for (iii=0;iii<N;iii++) { parts(iii,0) = 2; }
+	//for (iii=0;iii<n;iii++) { 
+		//parts(G(iii)-1,0) = 1;
+	//}
+	//NumericVector Bstat = murakami_stat_parts(parts,flavor);
+	//double B = Bstat(0);
+	//return B;
+//}
 
+
+// a weird interface, but basically take the sample_set
+// and compute a bunch of the Murakami B_fx statistics,
+// for f=0,1,2,3,4,5, set by the 'flavor'. We increment
+// through a bunch of sample_sets for efficiency.
 template <int flavor>
-NumericVector murakami_allv(size_t nx, size_t ny) {
-	size_t N = nx + ny;
-	int nc = bincoef[N][n1];
-	int iii,jjj;
-	int xcount,ycount;
-	double evx,evy,vvx,vvy,Np1,nxp1,nxp2,nyp1,nyp2;
+NumericVector murakami_pre_B(const size_t N,const size_t nx,IntegerVector parts,const size_t numits) {
+	const size_t ny = N - nx;
+	int iii,jjj,nnn;
+	double evx,vvx,Np1,nxp1;
 	double nonce,npart,dpart,bplus;
 	// preallocate
-	NumericVector B1(nc);
-	NumericVector B2(nc);
-	NumericVector Bstat(nc);
-
-	// this will hold the permutations.
-	NumericVector xrank(nx);
-	for (iii=0;iii<nx;iii++) {
-		xrank(iii) = 1 + iii;
-	}
+	NumericVector B1(numits);
 
 	Np1  = N + 1;
 	nxp1 = nx + 1;
-	nyp1 = ny + 1;
 
 	if ((flavor == 0) || (flavor == 2)) {
 		evx = N / nx;
-		evy = N / ny;
 		vvx = ny * N;
-		vvy = nx * N;
 	}
 	if ((flavor == 1) || (flavor == 3) || (flavor == 4) || (flavor == 5)) {
-		nxp2 = nx + 2;
-		nyp2 = ny + 2;
 		evx = Np1 / nxp1;
-		evy = Np1 / nyp1;
-		vvx = ny * Np1 / nxp2;
-		vvy = nx * Np1 / nyp2;
+		vvx = ny * Np1 / (nx + 2);
 	}
-	for (jjj=0;jjj<nc;jjj++) {
-		if (jjj!=0) {
-			// increment.
+	for (jjj=0;jjj<numits;jjj++) {
+		if (jjj > 0) {
+			// increment
 			iii = nx - 1;
-			while ((iii > 0) && (xperm(iii) == N - nx + iii + 1)) {
+			while ((iii > 0) && (parts(iii) == N - (nx - 1) + iii)) {
 				iii--;
 			}
-			xperm(iii)++;
-			for (;iii < nx - 1;iii++) {
-				xperm(iii+1) = xperm(iii) + 1;
+			parts(iii)++;
+			for (;iii < (nx - 1);iii++) {
+				parts(iii+1) = parts(iii)+1;
 			}
 		}
-		// now use xperm...
-
+		for (iii=1;iii<=nx;iii++) {
+			nnn = parts(iii-1);
+			nonce = iii / nxp1;
+			npart = (nnn - evx * iii);
+			dpart = (nonce * (1.0 - nonce) * vvx);
+			// template will optimize these
+			if (flavor == 0) {
+				bplus = npart * npart / dpart;
+			}
+			if (flavor == 1) {
+				bplus = (1.0 / nx) * npart * npart / dpart;
+			}
+			if (flavor == 2) {
+				bplus = npart * abs(npart) / dpart;
+			}
+			if (flavor == 3) {
+				bplus = (1.0 / nx) * npart * npart / (dpart * dpart);
+			}
+			if (flavor == 4) {
+				bplus = (1.0 / nx) * abs(npart) / (dpart * dpart);
+			}
+			if (flavor == 5) {
+				bplus = (1.0 / nx) * npart * npart / log(dpart);
+			}
+			B1(jjj) += bplus;
+		}
 	}
-
+	return B1;
 }
 
+// same interface, not templated, supposedly faster because of it
+NumericVector murakami_B(const size_t N,const size_t nx,IntegerVector parts,const size_t numits,int flavor) {
+	NumericVector B1;
+	switch(flavor) {
+		case 0:
+			B1 = murakami_pre_B<0>(N,nx,parts,numits);
+			break;
+		case 1:
+			B1 = murakami_pre_B<1>(N,nx,parts,numits);
+			break;
+		case 2:
+			B1 = murakami_pre_B<2>(N,nx,parts,numits);
+			break;
+		case 3:
+			B1 = murakami_pre_B<3>(N,nx,parts,numits);
+			break;
+		case 4:
+			B1 = murakami_pre_B<4>(N,nx,parts,numits);
+			break;
+		case 5:
+			B1 = murakami_pre_B<5>(N,nx,parts,numits);
+			break;
+	}
+	return B1;
+}
+
+//library(Rcpp)
+//sourceCpp('murakami_stat.cpp')
+//murakami_many_B(5,3,0)
+
+NumericVector murakami_many_B(const int N,const int nx,int flavor) {
+	IntegerVector parts(nx);
+	int iii;
+	for (iii=0;iii<nx;iii++) {
+		// our partitions are 1-based.
+		parts[iii]=iii+1;
+	}
+	size_t numits = (size_t)bincoef[N][nx];
+	return murakami_B(N,nx,parts,numits,flavor);
+}
+
+// [[Rcpp::export]]
+NumericVector murakami_all_B(int nx,int ny,int flavor=0) {
+	const int N = nx + ny;
+	const bool IS_SYMMETRIC = (nx == ny);
+	NumericVector B1,B2,B;
+	B1 = murakami_many_B(N,nx,flavor);
+	int nlen=B1.size();
+	B = NumericVector(nlen);
+	int iii;
+	if (IS_SYMMETRIC) {
+		// combine them;
+		if (flavor == 2) {
+			for (iii=0;iii < nlen;iii++) {
+				B(iii) = 0.5 * (B1(iii) - B1(nlen-iii-1));
+			}
+		} else {
+			for (iii=0;iii < nlen;iii++) {
+				B(iii) = 0.5 * (B1(iii) + B1(nlen-iii-1));
+			}
+		}
+	} else {
+		B2 = murakami_many_B(N,ny,flavor);
+		// combine them;
+		if (flavor == 2) {
+			for (iii=0;iii < nlen;iii++) {
+				B(iii) = 0.5 * (B1(iii) - B2(nlen-iii-1));
+			}
+		} else {
+			for (iii=0;iii < nlen;iii++) {
+				B(iii) = 0.5 * (B1(iii) + B2(nlen-iii-1));
+			}
+		}
+	}
+	return B;
+}
+
+// for speed comparison, timings of the new method defined here:
+//    a <- murakami_all_B(5, 5, 1)     24.12     25.35     29.67     26.77     32.91     51.08   100
+//    b <- murakami_all_B(7, 7, 1)    366.92    370.64    420.82    379.81    456.58   1235.38   100
+//   cc <- murakami_all_B(9, 9, 1)   7106.97   7192.79   7588.08   7304.08   7566.63  10396.69   100
+// ee <- murakami_all_B(11, 11, 1) 125301.28 126489.78 135681.89 127329.02 149259.48 183445.64   100
+// and the old method based on partitions::setparts and whatnot:
+// aa <- murakami_BB(5, 5, 1)     646.9     719.4     835.2     818.4     885.1    1636   100
+// bb <- murakami_BB(7, 7, 1)   20391.0   20632.6   21556.7   20869.3   21993.5   26766   100
+// cc <- murakami_BB(9, 9, 1) 1374527.5 1405699.7 1474427.9 1449461.6 1497241.3 2010725   100
+// I never got up to 11 & 11 with the old method.
+// the takeaway is that we are much faster now. yay.
+// 
+//
 
 
 //for vim modeline: (do not edit)
-// vim:ts=2:sw=2:tw=129:fdm=marker:fmr=FOLDUP,UNFOLD:cms=//%s:tags=.c_tags;:syn=cpp:ft=cpp:mps+=<\:>:ai:si:cin:nu:fo=croql:cino=p0t0c5(0:
+// vim:nowrap:ts=2:sw=2:tw=129:fdm=marker:fmr=FOLDUP,UNFOLD:cms=//%s:tags=.c_tags;:syn=cpp:ft=cpp:mps+=<\:>:ai:si:cin:nu:fo=croql:cino=p0t0c5(0:
