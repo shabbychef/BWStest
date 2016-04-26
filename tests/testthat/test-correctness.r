@@ -349,7 +349,7 @@ test_that("murakami_cdf matches (other) table 1",{#FOLDUP
 		alpha <- tab1[iii,7]
 		b4val <- tab1[iii,8]
 		ourv <- murakami_cdf(b4val,nx,ny,4,lower_tail=FALSE)
-		expect_equal(alpha,ourv,tolerance=1e-4,scale=1) 
+		expect_equal(alpha,ourv,tolerance=1e-3,scale=1) 
 	}
 
 	# sentinel
