@@ -59,7 +59,7 @@ using namespace Rcpp;
 //template <int flavor>
 //NumericVector murakami_pre_B(const size_t N,const size_t nx,IntegerVector parts,const size_t numits) {
 NumericVector murakami_pre_B(const size_t N,const size_t nx,IntegerVector parts,const size_t numits,const int flavor) {
-	if ((flavor < 0) || (flavor > 5)) { stop("unssuported flavor."); }
+	if ((flavor < 0) || (flavor > 5)) { stop("unsupported flavor."); }
 	int iii,jjj,nnn;
 	double evx,vvx,Np1,nxp1;
 	double nonce,npart,dpart,bplus;
@@ -129,9 +129,6 @@ NumericVector murakami_pre_B(const size_t N,const size_t nx,IntegerVector parts,
 					break;
 				case 5:
 					bplus = npart * npart / log(dpart);
-					break;
-				default:
-					stop("bad code");
 					break;
 			}
 			B1(jjj) += bplus / ((double) nx);

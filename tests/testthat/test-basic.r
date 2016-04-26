@@ -61,6 +61,9 @@ test_that("murakami computations",{#FOLDUP
 		statv <- murakami_stat(rnorm(10),rnorm(10),flavor)
 		allev <- murakami_stat_perms(3,3,flavor)
 		allev <- murakami_stat_perms(6,3,flavor)
+
+		# hope this errors, or it will consume all your memory!
+		expect_error(allev <- murakami_stat_perms(40,40,flavor))
 	}
 	expect_error(statv <- murakami_stat(rnorm(10),rnorm(10),flavor=-1))
 	expect_error(statv <- murakami_stat(rnorm(10),rnorm(10),flavor=6))
