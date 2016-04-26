@@ -65,7 +65,7 @@ NumericVector murakami_pre_B(const size_t N,const size_t nx,IntegerVector parts,
 	double nonce,npart,dpart,bplus;
 	// preallocate
 	NumericVector B1(numits);
-	const int ny = N - nx;
+	const int ny = (int)N - (int)nx;
 
 	Np1  = (double)N + 1.0;
 	nxp1 = (double)nx + 1.0;
@@ -73,8 +73,8 @@ NumericVector murakami_pre_B(const size_t N,const size_t nx,IntegerVector parts,
 	switch(flavor) {
 		case 0:
 		case 2:
-			evx = ((double)N) / (double)nx;
-			vvx = (double)ny * evx;
+			evx = ((double)N) / ((double)nx);
+			vvx = ((double)ny) * evx;
 			break;
 		default:
 			evx = Np1 / nxp1;
@@ -111,7 +111,7 @@ NumericVector murakami_pre_B(const size_t N,const size_t nx,IntegerVector parts,
 			nnn = parts(iii-1);
 			npart = ((double)nnn - evx * (double)iii);
 			nonce = ((double)iii) / nxp1;
-			dpart = ((nonce * (1.0 - nonce)) * vvx);
+			dpart = nonce * (1.0 - nonce) * vvx;
 
 			switch(flavor) {
 				case 0:
@@ -119,38 +119,21 @@ NumericVector murakami_pre_B(const size_t N,const size_t nx,IntegerVector parts,
 					bplus = npart * npart / dpart;
 					break;
 				case 2:
-					bplus = (npart * abs(npart)) / dpart;
+					bplus = (npart * std::abs(npart)) / dpart;
 					break;
 				case 3:
 					bplus = npart * npart / (dpart * dpart);
 					break;
 				case 4:
-					bplus = abs(npart) / (dpart * dpart);
+					bplus = std::abs(npart) / (dpart * dpart);
 					break;
 				case 5:
 					bplus = npart * npart / log(dpart);
 					break;
+				default:
+					stop("bad code");
+					break;
 			}
-
-			//// template will optimize these
-			//if (flavor == 0) {
-				//bplus = npart * npart / dpart;
-			//}
-			//if (flavor == 1) {
-				//bplus = npart * npart / dpart;
-			//}
-			//if (flavor == 2) {
-				//bplus = npart * abs(npart) / dpart;
-			//}
-			//if (flavor == 3) {
-				//bplus = npart * npart / (dpart * dpart);
-			//}
-			//if (flavor == 4) {
-				//bplus = abs(npart) / (dpart * dpart);
-			//}
-			//if (flavor == 5) {
-				//bplus = npart * npart / log(dpart);
-			//}
 			B1(jjj) += bplus / ((double) nx);
 		}
 	}
@@ -184,16 +167,23 @@ NumericVector murakami_pre_B(const size_t N,const size_t nx,IntegerVector parts,
 	//return B1;
 //}
 
-//library(Rcpp)
-//sourceCpp('murakami_stat.cpp')
-//murakami_many_B(5,3,0)
+
+/*
+double murakami_raw(int N,NumericVector x,int flavor=0) {
+	const size_t nx = (size_t)x.size();
+	IntegerVector parts(nx);
+	for (int iii=0;iii<nx;iii++) { parts(iii) = (int)x(iii); }
+	NumericVector B1 = murakami_pre_B(N,nx,parts,1,flavor);
+	return B1(0);
+}
+*/
 
 NumericVector murakami_many_B(const int N,const int nx,int flavor) {
 	IntegerVector parts(nx);
 	int iii;
 	for (iii=0;iii<nx;iii++) {
 		// our partitions are 1-based.
-		parts[iii]=iii+1;
+		parts(iii)=iii+1;
 	}
 	size_t numits = (size_t)Combinatorics::bincoef[N][nx];
 	return murakami_pre_B(N,nx,parts,numits,flavor);
@@ -285,7 +275,7 @@ double murakami_stat(NumericVector x,NumericVector y,int flavor=0) {
 			B = 0.5 * (B2(0) - B1(0));
 			break;
 		default:
-			B = 0.5 * (B1(0) + B2(0));
+			B = 0.5 * (B2(0) + B1(0));
 			break;
 	}
 	return B;

@@ -331,33 +331,25 @@ test_that("murakami_cdf matches (other) table 1",{#FOLDUP
 		nx <- nvals[iii]
 		ny <- mvals[iii]
 
-		if (nx == ny) {
-			alpha <- tab1[iii,1]
-			b2val <- tab1[iii,2]
-			ourv <- murakami_cdf(b2val,nx,ny,2,lower_tail=FALSE)
-			expect_equal(alpha,ourv,tolerance=1e-4,scale=1) 
+		alpha <- tab1[iii,1]
+		b2val <- tab1[iii,2]
+		ourv <- murakami_cdf(b2val,nx,ny,2,lower_tail=FALSE)
+		expect_equal(alpha,ourv,tolerance=1e-3,scale=1) 
 
-			alpha <- tab1[iii,3]
-			b2val <- tab1[iii,4]
-			ourv <- murakami_cdf(-b2val,ny,nx,2,lower_tail=TRUE)
-			expect_equal(alpha,ourv,tolerance=1e-4,scale=1) 
+		alpha <- tab1[iii,3]
+		b2val <- tab1[iii,4]
+		ourv <- murakami_cdf(b2val,ny,nx,2,lower_tail=FALSE)
+		expect_equal(alpha,ourv,tolerance=1e-3,scale=1) 
 
-			#alpha <- tab1[iii,5]
-			#b3val <- tab1[iii,6]
-			#ourv <- murakami_cdf(b3val,nx,ny,3,lower_tail=FALSE)
-			#if (is.character(all.equal(alpha,ourv,tolerance=1e-4,scale=1))) {
-				#cat(sprintf('nomatch: B3 %d %d %f: %f != %f\n',nx,ny,b3val,alpha,ourv))
-			#}
-			##expect_equal(alpha,ourv,tolerance=1e-4,scale=1) 
+		alpha <- tab1[iii,5]
+		b3val <- tab1[iii,6]
+		ourv <- murakami_cdf(b3val,nx,ny,3,lower_tail=FALSE)
+		expect_equal(alpha,ourv,tolerance=1e-3,scale=1) 
 
-			#alpha <- tab1[iii,7]
-			#b4val <- tab1[iii,8]
-			#ourv <- murakami_cdf(b4val,nx,ny,4,lower_tail=FALSE)
-			#if (is.character(all.equal(alpha,ourv,tolerance=1e-4,scale=1))) {
-				#cat(sprintf('nomatch: B4 %d %d %f: %f != %f\n',nx,ny,b4val,alpha,ourv))
-			#}
-			##expect_equal(alpha,ourv,tolerance=1e-4,scale=1) 
-		}
+		alpha <- tab1[iii,7]
+		b4val <- tab1[iii,8]
+		ourv <- murakami_cdf(b4val,nx,ny,4,lower_tail=FALSE)
+		expect_equal(alpha,ourv,tolerance=1e-4,scale=1) 
 	}
 
 	# sentinel
