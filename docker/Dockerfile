@@ -22,13 +22,15 @@ RUN (apt-get dist-upgrade -y ; \
   libgs9 texlive-base texlive-binaries libcupsimage2 libcups2 \ 
 	qpdf pandoc ghostscript texlive-latex-base texlive-fonts-recommended texlive-fonts-extra)
 
-RUN (apt-get dist-upgrade -y ; \
-  apt-get update -qq ; \
-  DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get install -q -y --no-install-recommends \ 
-	libgmp-dev)
+# if you need partitions do this:
+#RUN (apt-get dist-upgrade -y ; \
+#apt-get update -qq ; \
+#DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get install -q -y --no-install-recommends \ 
+#libgmp-dev ; \
+#/usr/local/bin/install2.r partitions)
 
 # rinstall somethings...
-RUN /usr/local/bin/install2.r Rcpp testthat roxygen2 devtools knitr partitions memoise
+RUN /usr/local/bin/install2.r Rcpp testthat roxygen2 devtools knitr memoise
 
 #####################################################
 # entry and cmd# FOLDUP
