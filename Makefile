@@ -59,7 +59,7 @@ BUILD_ENV 				 = R_QPDF=$(R_QPDF) R_GSCMD=$(R_GSCMD) \
 ############## MARKERS ##############
 
 .PHONY   : help targets
-.PHONY   : build attributes document
+.PHONY   : build attributes document docker_img
 .SUFFIXES: 
 .PRECIOUS: %.cpp .docker_img
 
@@ -107,7 +107,9 @@ README.md : README.Rmd $(PKG_INSTALLED)
 	@mkdir -p github_extra/figure
 	r -l Rcpp -l knitr -l devtools -e 'setwd("$(<D)");if (require(knitr)) { knit("$(<F)") }'
 
-.docker_img : docker/Dockerfile  ## build the docker image
+docker_img : .docker_img  ## build the docker image
+
+.docker_img : docker/Dockerfile  
 	$(DOCKER) build --rm -t $(USER)/$(PKG_LCNAME)-crancheck docker
 	touch $@
 
