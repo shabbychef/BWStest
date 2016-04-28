@@ -53,6 +53,10 @@
 #' \code{\link{murakami_stat}}, \code{\link{murakami_cdf}}.
 #' @template etc
 #' @template ref-bws
+#' @note The code will happily compute Murakami's \eqn{B_3} through \eqn{B_5}
+#' for large sample sizes, even though nominal coverage is \emph{not} achieved.
+#' A warning will be thrown. User assumes all risk relying on results from this
+#' function.
 #' @examples 
 #'
 #' # under the null
@@ -137,6 +141,9 @@ bws_test <- function(x,y,
 	}
 	zeta <- 0
 	names(zeta) <- "difference in survival functions"
+	if ((method %in% c('B3','B4','B5')) && (max(nx,ny) > 12)) {
+		warning('Nominal coverage for B3 through B5 is *not* achieved for larger sample sizes. Use at your own risk!')
+	}
 
 	retval <- list(statistic = bval, 
 								 p.value = pval,

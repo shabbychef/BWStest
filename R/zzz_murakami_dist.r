@@ -36,6 +36,9 @@
 .murakami_practical_cdf <- function(B,n1,n2,flavor) 
 {
 	CUTOFF <- 11 
+	if ((flavor > 2) && (max(n1,n2) > CUTOFF + 1)) {
+		warning('Nominal coverage for B3 through B5 is not achieved for larger sample sizes. Use at your own risk!')
+	}
 	ecdf <- .murakami_memo_ecdf(min(CUTOFF,n1),min(CUTOFF,n2),flavor)
 	ecdf(B)
 }

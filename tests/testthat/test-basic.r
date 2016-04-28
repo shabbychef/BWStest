@@ -98,6 +98,21 @@ test_that("bws_test",{#FOLDUP
 			hval <- bws_test(x,y,method=mth,alternative=alt)
 		}
 	}
+	for (mth in c('BWS','B1','B3','B4','B5')) {
+		for (alt in c("greater","less")) {
+			expect_error(hval <- bws_test(x,y,method=mth,alternative=alt))
+		}
+	}
+
+	# better get warnings out of this due to small sample size...
+	x <- rnorm(20)
+	y <- rnorm(20)
+
+	for (mth in c('B3','B4','B5')) {
+		for (alt in c("two.sided")) {
+			expect_warning(hval <- bws_test(x,y,method=mth,alternative=alt))
+		}
+	}
 
 	# sentinel
 	expect_true(TRUE)

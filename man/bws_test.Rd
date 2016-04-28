@@ -43,6 +43,12 @@ the p-value, and the \code{method} noted.
 \description{
 Perform the Baumgartner-Weiss-Schindler hypothesis test.
 }
+\note{
+The code will happily compute Murakami's \eqn{B_3} through \eqn{B_5}
+for large sample sizes, even though nominal coverage is \emph{not} achieved.
+A warning will be thrown. User assumes all risk relying on results from this
+function.
+}
 \examples{
 
 # under the null

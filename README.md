@@ -38,8 +38,8 @@ if (require(devtools)) {
 
 # Basic Usage
 
-The front end for the hypothesis test is the function `bws_test`. At the moment, this only
-supports the classical Baumgartner-Weiß-Schindler test, returning a `htest` object:
+The front end for the hypothesis test is the function `bws_test`. By default it supports
+the the classical Baumgartner-Weiß-Schindler test for a two-sided alternative, returning a `htest` object:
 
 
 ```r
@@ -48,8 +48,8 @@ set.seed(12345)
 # under the null:
 x <- rnorm(200)
 y <- rnorm(200)
-bval <- bws_test(x, y)
-show(bval)
+hval <- bws_test(x, y)
+show(hval)
 ```
 
 ```
@@ -57,15 +57,15 @@ show(bval)
 ## 	two-sample BWS test
 ## 
 ## data:  x vs. y
-## b = 1, p-value = 0.2
-## alternative hypothesis: two.sided
+## B = 1, p-value = 0.2
+## alternative hypothesis: true difference in survival functions is not equal to 0
 ```
 
 ```r
 # under the alternative:
 z <- rnorm(200, mean = 1)
-bval <- bws_test(x, z)
-show(bval)
+hval <- bws_test(x, z)
+show(hval)
 ```
 
 ```
@@ -73,9 +73,51 @@ show(bval)
 ## 	two-sample BWS test
 ## 
 ## data:  x vs. z
-## b = 30, p-value <2e-16
-## alternative hypothesis: two.sided
+## B = 30, p-value <2e-16
+## alternative hypothesis: true difference in survival functions is not equal to 0
 ```
+
+The code also supports alternative test statistics from Neuhäuser and Murakami, along with supporting
+one-sided alternatives for some of the tests:
+
+
+```r
+set.seed(12345)
+# under the alternative:
+x <- rnorm(200)
+y <- rnorm(200, mean = 1)
+hval <- bws_test(x, z, alternative = "less")
+show(hval)
+```
+
+```
+## 
+## 	two-sample Neuhauser/Murakami test
+## 
+## data:  x vs. z
+## B_2 = -30, p-value <2e-16
+## alternative hypothesis: true difference in survival functions is less than 0
+```
+
+```r
+x <- rnorm(8)
+y <- rnorm(8, mean = 1)
+hval <- bws_test(x, z, method = "B3", alternative = "two.sided")
+show(hval)
+```
+
+```
+## 
+## 	two-sample Murakami test
+## 
+## data:  x vs. z
+## B_3 = 2, p-value = 0.009
+## alternative hypothesis: true difference in survival functions is not equal to 0
+```
+
+We should note that the `B3` through `B5` tests do _not_ achieve nominal coverage
+for large sample sizes and should _only_ be used on sample sizes of about 12 or fewer
+in each of the two samples.
 
 ## Checking the null
 
@@ -348,9 +390,9 @@ print(ph)
 
 ## Murakami tests
 
-[Neuhauser](http://doai.io/10.1007/BF02762032) and 
+[Neuhäuser](http://doai.io/10.1007/BF02762032) and 
 [Murakami](http://doai.io/10.1080/00949655.2010.551516) described
-some modifications to the original test of Baumgartner. Neuhauser's
+some modifications to the original test of Baumgartner. Neuhäuser's
 test allows one to test against directional alternatives. Murakami
 enumerated some modifications to the weighting scheme. These are
 available via the `murakami_stat` function, where the `flavor`
@@ -358,7 +400,7 @@ corresponds to the test number from Murakami's paper, namely
 
 * 0 corresponds to the original BWS statistic.
 * 1 corresponds to Murakami's first modification.
-* 2 corresponds to Neuhauser's statistic, which can take negative values.
+* 2 corresponds to Neuhäuser's statistic, which can take negative values.
 * 3 through 5 correspond to different weighting schemes of Murakami's.
 
 Here we take these through the paces as above.
@@ -434,7 +476,7 @@ So that's not so great.
 
 We can perform the power comparisons of Baumgartner _et al._ using the Murakami test statistics.
 Here we consider the setup of figure 2A, samples of size 10 from the normal distribution with
-equal variances but different means. Neuhauser's test is, as expected, more powerful for detecting
+equal variances but different means. Neuhäuser's test is, as expected, more powerful for detecting
 this one-sided alternative, probably on par with the t-test, while the BWS test (basically equivalent
 to Murakami 1) is next, then 5, 3, 4.
 
@@ -489,7 +531,7 @@ print(ph)
 <img src="github_extra/figure/murakami_fig_two_A-1.png" title="plot of chunk murakami_fig_two_A" alt="plot of chunk murakami_fig_two_A" width="700px" height="500px" />
 
 Now we consider figure2B, with two samples of equal size from the normal distribution with zero
-mean, but different standard deviations. Neuhauser's test is nearly useless here because the 
+mean, but different standard deviations. Neuhäuser's test is nearly useless here because the 
 means of the populations are equal. Murakami 3, 4, and 5 are the most powerful, followed by BWS.
 
 
@@ -651,5 +693,4 @@ I anticipate the following:
 
 * Modifications of flavors 3 through 5 so that they converge for large
 sample sizes.
-* Use of flavor 2 (Neuhauser's test) in the `bws_test` function.
 
