@@ -8,9 +8,9 @@
 ############### FLAGS ###############
 
 VMAJOR 						 = 0
-VMINOR 						 = 1
+VMINOR 						 = 2
 VPATCH  					 = 0
-VDEV 							 = .9000
+VDEV 							 = 
 VERSION 					 = $(VMAJOR).$(VMINOR).$(VPATCH)$(VDEV)
 TODAY 						:= $(shell date +%Y-%m-%d)
 

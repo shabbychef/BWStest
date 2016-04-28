@@ -10,7 +10,7 @@ News for package 'BWStest'
 \newcommand{\cranBWStest}{\CRANpkg{BWStest}}
 \newcommand{\BWStest}{\href{https://github.com/shabbychef/BWStest}}
 }
-\section{\BWStest{} Initial Version 0.2.0 (2016-) }{
+\section{\BWStest{} Initial Version 0.2.0 (2016-04-29) }{
 
 \itemize{
 \item Adding Murakami statistics.
