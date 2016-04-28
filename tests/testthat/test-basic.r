@@ -83,6 +83,25 @@ test_that("murakami computations",{#FOLDUP
 	# sentinel
 	expect_true(TRUE)
 })#UNFOLD
+test_that("bws_test",{#FOLDUP
+	set.char.seed("140d1002-1cc4-426a-8489-d7cd62988d0b")
+
+	x <- rnorm(8)
+	y <- rnorm(8)
+
+	for (mth in c('default','BWS','Neuhauser','B1','B2','B3','B4','B5')) {
+		hval <- bws_test(x,y,method=mth,alternative='two.sided')
+	}
+
+	for (mth in c('Neuhauser','B2')) {
+		for (alt in c("two.sided","greater","less")) {
+			hval <- bws_test(x,y,method=mth,alternative=alt)
+		}
+	}
+
+	# sentinel
+	expect_true(TRUE)
+})#UNFOLD
 
 # 2FIX: check the effects of NA
 #UNFOLD

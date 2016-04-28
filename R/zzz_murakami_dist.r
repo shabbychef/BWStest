@@ -16,7 +16,31 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with BWStest.  If not, see <http://www.gnu.org/licenses/>.
 
-.murakami_memo_stats <- memoise::memoise(murakami_stat_perms)
+
+# create an empirical CDF function that takes ties into account.
+.murakami_ecdf <- function(n1,n2,flavor) 
+{
+	allv <- murakami_stat_perms(n1,n2,flavor)
+	e1 <- stats::ecdf(allv)
+	e2 <- stats::ecdf(-allv)
+
+	function(B) {
+		ple <- e1(B)
+	 	pge <- e2(-B)
+		retv <- 0.5 * (ple + (1 - pge))
+	}
+}
+
+.murakami_memo_ecdf <- memoise::memoise(.murakami_ecdf)
+
+.murakami_practical_cdf <- function(B,n1,n2,flavor) 
+{
+	CUTOFF <- 11 
+	ecdf <- .murakami_memo_ecdf(min(CUTOFF,n1),min(CUTOFF,n2),flavor)
+	ecdf(B)
+}
+
+# .murakami_memo_stats <- memoise::memoise(murakami_stat_perms)
 
 #' @title Murakami test statistic distribution.
 #'
@@ -71,13 +95,8 @@
 murakami_cdf <- function(B, n1, n2, flavor=0L, lower_tail=TRUE) {
 	# errors on flavor can come later, but this is important here:
 	stopifnot(n1 > 0,n2 > 0)
-	CUTOFF <- 11 
-	allv <- .murakami_memo_stats(min(CUTOFF,n1),min(CUTOFF,n2),flavor)
 
-	# normal approximation when beyond CUTOFF?
-	ple <- stats::ecdf(allv)(B)
-	pge <- stats::ecdf(-allv)(-B)
-	retv <- 0.5 * (ple + (1 - pge))
+	retv <- .murakami_practical_cdf(B,n1,n2,flavor)
 	if (!lower_tail) {
 		retv <- 1 - retv
 	}

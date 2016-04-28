@@ -82,16 +82,6 @@ test_that("bws_cdf matches table I",{#FOLDUP
 	# sentinel
 	expect_true(TRUE)
 })#UNFOLD
-test_that("bws_test under alternative",{#FOLDUP
-	set.char.seed("ee76160c-844e-4b3d-9cb7-193d2621355c")
-	x <- rnorm(100)
-	y <- rnorm(100,mean=3)
-	ht <- bws_test(x,y)
-	expect_lt(ht$p.value,1e-8)
-
-	# sentinel
-	expect_true(TRUE)
-})#UNFOLD
 test_that("bws_cdf sane range",{#FOLDUP
 	bvals <- exp(seq(log(0.1),log(100),length.out=201))
 	for (lower_tail in c(TRUE,FALSE)) {
@@ -119,6 +109,30 @@ test_that("bws_cdf deterministic",{#FOLDUP
 	pv1 <- bws_cdf(bvals)
 	pv2 <- bws_cdf(bvals)
 	expect_equal(pv1,pv2)
+
+	# sentinel
+	expect_true(TRUE)
+})#UNFOLD
+test_that("bws_test under alternative",{#FOLDUP
+	set.char.seed("ee76160c-844e-4b3d-9cb7-193d2621355c")
+	x <- rnorm(100)
+	y <- rnorm(100,mean=3)
+	ht <- bws_test(x,y)
+	expect_lt(ht$p.value,1e-8)
+
+	skip_on_cran()
+	replicate(10,{
+		x <- rnorm(100)
+		y <- rnorm(100,mean=0.7)
+		hval <- bws_test(x,y,alternative='less')
+		expect_lt(hval$p.value,0.05)
+
+		hval <- bws_test(x,y,alternative='greater')
+		expect_lt(1 - hval$p.value,0.05)
+
+		hval <- bws_test(x,y,alternative='two.sided')
+		expect_lt(hval$p.value,0.10)
+	})
 
 	# sentinel
 	expect_true(TRUE)

@@ -24,14 +24,35 @@
 #'
 #' @param x a vector of the first sample.
 #' @param y a vector of the first sample.
+#' @param method a character string specifying the test statistic to use.
+#' should be one of the following:
+#' \describe{
+#' \item{default}{This is \dQuote{Hobson's choice}, which uses the classical
+#' BWS test for two-sided alternative, but Neuhauser for one sided
+#' alternatives.}
+#' \item{BWS}{Use the classical BWS test.}
+#' \item{Neuhauser}{Use Neuhauser's test.}
+#' \item{B1}{Use Murakami's \eqn{B_1}{B1} test.}
+#' \item{B2}{Use Murakami's \eqn{B_2}{B2} test, which is exactly Neuhauser's test.}
+#' \item{B3}{Use Murakami's \eqn{B_3}{B3} test.}
+#' \item{B4}{Use Murakami's \eqn{B_4}{B4} test.}
+#' \item{B5}{Use Murakami's \eqn{B_5}{B5} test.}
+#' }
+#' Only Neuhauser's test supports one-sided alternatives.
+#' @param alternative a character string specifying the alternative hypothesis,
+#'        must be one of \dQuote{two.sided} (default), \dQuote{greater} or
+#'        \dQuote{less}. You can specify just the initial letter.
+#'        \dQuote{greater} corresponds to testing whether the survival function
+#'        of \code{x} is greater than that of \code{y}; equivalently one can
+#'        think of this as \code{x} being \sQuote{greater} than \code{y}
+#'        in the sense of first order stochastic dominance.
 #' @return Object of class \code{htest}, a list of the test statistic,
 #' the p-value, and the \code{method} noted.
 #' @keywords htest
-#' @seealso \code{\link{bws_test}}, \code{\link{bws_stat}} 
+#' @seealso \code{\link{bws_test}}, \code{\link{bws_stat}},
+#' \code{\link{murakami_stat}}, \code{\link{murakami_cdf}}.
 #' @template etc
 #' @template ref-bws
-#' @note Eventually this will support the one-sided tests of
-#' Neuhauser and Murakami.
 #' @examples 
 #'
 #' # under the null
@@ -43,15 +64,34 @@
 #' # under the alternative
 #' set.seed(123)
 #' x <- rnorm(100)
-#' y <- rnorm(100,mean=0.5)
+#' y <- rnorm(100,mean=1.0)
 #' hval <- bws_test(x,y)
+#' show(hval)
+#' stopifnot(hval$p.value < 0.05)
+#' 
+#' # under the alternative with a one sided test.
+#' set.seed(123)
+#' x <- rnorm(100)
+#' y <- rnorm(100,mean=0.7)
+#' hval <- bws_test(x,y,alternative='less')
+#' show(hval)
+#' stopifnot(hval$p.value < 0.01)
+#'
+#' hval <- bws_test(x,y,alternative='greater')
+#' stopifnot(hval$p.value > 0.99)
+#'
+#' hval <- bws_test(x,y,alternative='two.sided')
+#' stopifnot(hval$p.value < 0.05)
 #'
 #' @rdname bws_test
 #' @export
-bws_test <- function(x,y)
+bws_test <- function(x,y,
+										 method=c('default','BWS','Neuhauser','B1','B2','B3','B4','B5'),
+										 alternative=c("two.sided","greater","less")) 
 {
+	method <- match.arg(method)
+	alternative <- match.arg(alternative)
 	dname <- paste(deparse(substitute(x)),'vs.',deparse(substitute(y)))
-	method <- "two-sample BWS test"
 	x <- x[!is.na(x)]
 	y <- y[!is.na(y)]
 	nx <- length(x)
@@ -59,23 +99,54 @@ bws_test <- function(x,y)
 	if (max(nx,ny) <= 8) {
 		warning('A permutation test would likely make more sense.')
 	} else if (min(nx,ny) <= 10) {
-		warning('Small sample size may cause loss of nominal coverage.')
+		warning('Small, imbalanced, sample size may cause loss of nominal coverage.')
 	}
-	alternative <- 'two.sided'
 
-	bval <- bws_stat(x,y)
-	names(bval) <- "b"
-	pval <- bws_cdf(bval,lower_tail=FALSE)
+	if (method == 'Neuhauser') { method <- 'B2' }  # for simplicity
+
+	if (alternative == 'two.sided') {
+		if (method == 'default') { method <- 'BWS' }  
+		switch(method,
+					 BWS={
+							method <- "two-sample BWS test"
+							bval <- bws_stat(x,y)
+							names(bval) <- "B"
+							pval <- bws_cdf(bval,lower_tail=FALSE)
+					},
+					{  # default is parametrized by the number.
+						flavor <- as.numeric(gsub('^B(\\d)$','\\1',method))
+					 	method <- "two-sample Murakami test"
+					 	bval <- murakami_stat(x,y,flavor=flavor)
+					 	names(bval) <- sprintf('B_%d',flavor)
+					 	pval <- murakami_cdf(bval,n1=nx,n2=ny,flavor=flavor,lower_tail=FALSE)
+					})
+	} else {
+		if (method == 'default') { method <- 'B2' }  
+		stopifnot(method %in% c('B2'))
+		method <- "two-sample Neuhauser/Murakami test"
+		switch(alternative,
+					 greater={
+						 bval <- murakami_stat(x,y,flavor=2L)
+						 pval <- murakami_cdf(bval,n1=nx,n2=ny,flavor=2L)
+					 },
+					 less={
+						 bval <- murakami_stat(y,x,flavor=2L)
+						 pval <- murakami_cdf(bval,n1=ny,n2=nx,flavor=2L)
+					 })
+		names(bval) <- "B_2"
+	}
+	zeta <- 0
+	names(zeta) <- "difference in survival functions"
 
 	retval <- list(statistic = bval, 
 								 p.value = pval,
 								 alternative = alternative,
+								 null.value = zeta,
 								 method = method, 
 								 data.name = dname)
 	class(retval) <- "htest"
 	return(retval)
 }
-#bws_test <- function(x,y,alternative=c("two.sided","greater","less")) 
 
 #for vim modeline: (do not edit)
 # vim:fdm=marker:fmr=FOLDUP,UNFOLD:cms=#%s:syn=r:ft=r
