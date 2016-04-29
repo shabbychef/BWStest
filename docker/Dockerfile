@@ -19,7 +19,7 @@ MAINTAINER Steven E. Pav, shabbychef@gmail.com
 RUN (apt-get dist-upgrade -y ; \
   apt-get update -qq ; \
   DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get install -q -y --no-install-recommends \ 
-  libgs9 texlive-base texlive-binaries libcupsimage2 libcups2 \ 
+  libgs9 texlive-base texlive-binaries libcupsimage2 libcups2 curl \
 	qpdf pandoc ghostscript texlive-latex-base texlive-fonts-recommended texlive-fonts-extra)
 
 # if you need partitions do this:
@@ -30,7 +30,8 @@ RUN (apt-get dist-upgrade -y ; \
 #/usr/local/bin/install2.r partitions)
 
 # rinstall somethings...
-RUN /usr/local/bin/install2.r Rcpp testthat roxygen2 devtools knitr memoise
+RUN /usr/local/bin/install2.r Rcpp testthat roxygen2 devtools knitr memoise 
+#RUN /usr/local/bin/install2.r RCurl
 
 #####################################################
 # entry and cmd# FOLDUP

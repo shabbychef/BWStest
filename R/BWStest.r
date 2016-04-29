@@ -49,6 +49,7 @@
 #' @useDynLib BWStest
 #' @importFrom Rcpp evalCpp
 #' @importFrom stats ecdf
+#' @importFrom memoise memoise
 #' @exportPattern "^[[:alpha:]]+"
 #'
 NULL
