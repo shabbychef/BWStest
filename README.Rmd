@@ -51,6 +51,10 @@ library(microbenchmark)
 [![Total](http://cranlogs.r-pkg.org/badges/grand-total/BWStest?color=green)](http://www.r-pkg.org/pkg/BWStest)
 ![RCpp](https://img.shields.io/badge/RCpp-inside-blue.svg)
 
+[![ALSO BAD CRAN](http://www.r-pkg.org/badges/version/BWStest)](https://cran.rstudio.com/web/packages/BWStest/index.html)
+[![BAD CRAN](http://www.r-pkg.org/badges/version/BWStest)](http://cran.rstudio.com/package=BWStest) 
+
+
 Performs the [Baumgartner-Weiß-Schindler 2-sample test](http://doai.io/10.2307/2533862) of equal probability
 distributions. 
 
