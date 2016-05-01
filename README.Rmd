@@ -42,8 +42,6 @@ library(microbenchmark)
 #[![Total](http://cranlogs.r-pkg.org/badges/grand-total/BWStest?color=green)](http://www.r-pkg.org/pkg/BWStest)
 ```
 
-[link which is bad](http://www.thiswebsitedoesnotexistatallreally.com/)
-
 # BWStest
 
 [![Build Status](https://travis-ci.org/shabbychef/BWStest.png)](https://travis-ci.org/shabbychef/BWStest)

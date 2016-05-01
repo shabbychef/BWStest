@@ -1,7 +1,5 @@
 
 
-[link which is bad](http://www.thiswebsitedoesnotexistatallreally.com/)
-
 # BWStest
 
 [![Build Status](https://travis-ci.org/shabbychef/BWStest.png)](https://travis-ci.org/shabbychef/BWStest)
