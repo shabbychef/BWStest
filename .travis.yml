@@ -1,6 +1,10 @@
 # see https://docs.travis-ci.com/user/languages/r
 # and http://blog.rstudio.org/2016/03/09/r-on-travis-ci/
 
+# c.f. https://github.com/travis-ci/travis-ci/issues/5974
+env:
+  - _R_CHECK_CRAN_INCOMING_=TRUE
+
 language: r
 
 # set this true to install libgmp-dev!?
@@ -19,7 +23,7 @@ r:
 r_github_packages :
   - jimhester/covr
 
-warnings_are_errors : true
+warnings_are_errors : false
 
 r_build_args : " --compact-vignettes=gs+qpdf"
 
