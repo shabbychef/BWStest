@@ -33,11 +33,14 @@ RUN (apt-get dist-upgrade -y ; \
 RUN /usr/local/bin/install2.r Rcpp testthat roxygen2 devtools knitr memoise 
 #RUN /usr/local/bin/install2.r RCurl
 
+ENV _R_CHECK_CRAN_INCOMING_ TRUE
+
 #####################################################
 # entry and cmd# FOLDUP
 # these are the default, but remind you that you might want to use /usr/bin/R instead?
 # always use array syntax:
-ENTRYPOINT ["/usr/local/bin/Rdevel","CMD","check","--as-cran","--output=/tmp"]
+#ENTRYPOINT ["/usr/local/bin/Rdevel","CMD","check","--as-cran","--output=/tmp"]
+ENTRYPOINT ["R","CMD","check","--as-cran","--output=/tmp"]
 
 # ENTRYPOINT and CMD are better together:
 CMD ["/srv/*.tar.gz"]
