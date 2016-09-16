@@ -6,7 +6,7 @@
 \description{
 News for package 'BWStest'
 
-\newcommand{\CRANpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
+\newcommand{\CRANpkg}{\href{http://cran.r-project.org/package=#1}{\pkg{#1}}}
 \newcommand{\cranBWStest}{\CRANpkg{BWStest}}
 \newcommand{\BWStest}{\href{https://github.com/shabbychef/BWStest}}
 }
