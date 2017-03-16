@@ -16,11 +16,22 @@ FROM shabbychef/crancheck
 MAINTAINER Steven E. Pav, shabbychef@gmail.com
 # UNFOLD
 
-RUN (apt-get dist-upgrade -y ; \
-  apt-get update -qq ; \
-  DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get install -q -y --no-install-recommends \ 
+ENV DOCKERFILE_REFRESHED_AT 2017.03.14
+# see http://crosbymichael.com/dockerfile-best-practices.html
+#RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
+
+RUN (apt-get clean -y ; \
+ apt-get update -y -qq; \
+ apt-get update --fix-missing );
+
+#RUN (apt-get dist-upgrade -y ; \
+#apt-get update -qq ; \
+RUN (DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get install -q -y --no-install-recommends \ 
   libgs9 texlive-base texlive-binaries libcupsimage2 libcups2 curl \
 	qpdf pandoc ghostscript texlive-latex-base texlive-fonts-recommended texlive-fonts-extra)
+
+RUN (DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get install -q -y --no-install-recommends \ 
+	curl)
 
 # if you need partitions do this:
 #RUN (apt-get dist-upgrade -y ; \
@@ -32,6 +43,12 @@ RUN (apt-get dist-upgrade -y ; \
 # rinstall somethings...
 RUN /usr/local/bin/install2.r Rcpp testthat roxygen2 devtools knitr memoise 
 #RUN /usr/local/bin/install2.r RCurl
+
+RUN (curl --silent -o CvM2SL2Test_2.0-1.tar.gz "https://cran.r-project.org/src/contrib/Archive/CvM2SL2Test/CvM2SL2Test_2.0-1.tar.gz"  ; \
+	R CMD INSTALL CvM2SL2Test_2.0-1.tar.gz )
+
+RUN (mkdir -p /usr/local/lib/R/site-library ; \
+	chmod -R 777 /usr/local/lib/R/site-library )
 
 ENV _R_CHECK_CRAN_INCOMING_ TRUE
 
