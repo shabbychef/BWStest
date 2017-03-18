@@ -27,28 +27,20 @@ RUN (apt-get clean -y ; \
 #RUN (apt-get dist-upgrade -y ; \
 #apt-get update -qq ; \
 RUN (DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get install -q -y --no-install-recommends \ 
-  libgs9 texlive-base texlive-binaries libcupsimage2 libcups2 curl \
-	qpdf pandoc ghostscript texlive-latex-base texlive-fonts-recommended texlive-fonts-extra)
-
-RUN (DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get install -q -y --no-install-recommends \ 
-	curl)
-
-# if you need partitions do this:
-#RUN (apt-get dist-upgrade -y ; \
-#apt-get update -qq ; \
-#DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get install -q -y --no-install-recommends \ 
-#libgmp-dev ; \
-#/usr/local/bin/install2.r partitions)
+  libgs9 texlive-base texlive-binaries \
+	libcupsimage2 libcups2 curl wget \
+	qpdf pandoc ghostscript \
+	texlive-latex-extra texlive-latex-base texlive-fonts-recommended texlive-fonts-extra ; \
+	sync ; \
+	mkdir -p /usr/local/lib/R/site-library ; \
+	chmod -R 777 /usr/local/lib/R/site-library ; \
+	sync ; \
+	/usr/local/bin/install2.r Rcpp testthat roxygen2 devtools knitr formatR codetools)
 
 # rinstall somethings...
-RUN /usr/local/bin/install2.r Rcpp testthat roxygen2 devtools knitr memoise 
-#RUN /usr/local/bin/install2.r RCurl
-
 RUN (curl --silent -o CvM2SL2Test_2.0-1.tar.gz "https://cran.r-project.org/src/contrib/Archive/CvM2SL2Test/CvM2SL2Test_2.0-1.tar.gz"  ; \
-	R CMD INSTALL CvM2SL2Test_2.0-1.tar.gz )
-
-RUN (mkdir -p /usr/local/lib/R/site-library ; \
-	chmod -R 777 /usr/local/lib/R/site-library )
+	R CMD INSTALL CvM2SL2Test_2.0-1.tar.gz ; \
+	/usr/local/bin/install2.r memoise )
 
 ENV _R_CHECK_CRAN_INCOMING_ TRUE
 
