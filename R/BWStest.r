@@ -64,12 +64,18 @@ NULL
 #' \newcommand{\cranBWStest}{\CRANpkg{BWStest}}
 #' \newcommand{\BWStest}{\href{https://github.com/shabbychef/BWStest}}
 #'
-#' @section \BWStest{} Initial Version 0.2.0 (2016-04-29) :
+#' @section \BWStest{} Version 0.2.1 (2017-03-19) :
+#' \itemize{
+#' \item Package maintenance--no new features.
+#' \item move github figures to location CRAN understands.
+#' }
+#'
+#' @section \BWStest{} Version 0.2.0 (2016-04-29) :
 #' \itemize{
 #' \item Adding Murakami statistics.
 #' }
 #'
-#' @section \BWStest{} Initial Version 0.1.0 (2016-04-07) :
+#' @section \BWStest{} Version 0.1.0 (2016-04-07) :
 #' \itemize{
 #' \item First CRAN release.
 #' }
