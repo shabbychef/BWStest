@@ -49,7 +49,8 @@ ENV _R_CHECK_CRAN_INCOMING_ TRUE
 # these are the default, but remind you that you might want to use /usr/bin/R instead?
 # always use array syntax:
 #ENTRYPOINT ["/usr/local/bin/Rdevel","CMD","check","--as-cran","--output=/tmp"]
-ENTRYPOINT ["R","CMD","check","--as-cran","--output=/tmp"]
+#ENTRYPOINT ["R","CMD","check","--as-cran","--output=/tmp"]
+ENTRYPOINT ["/usr/local/bin/R","CMD","check","--as-cran","--output=/tmp"]
 
 # ENTRYPOINT and CMD are better together:
 CMD ["/srv/*.tar.gz"]
