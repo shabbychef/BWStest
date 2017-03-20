@@ -15,6 +15,7 @@ News for package 'BWStest'
 \itemize{
 \item Package maintenance--no new features.
 \item move github figures to location CRAN understands.
+\item package initialization mumbo jumbo, see Rcpp issue 636.
 }
 }
 

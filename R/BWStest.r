@@ -68,6 +68,7 @@ NULL
 #' \itemize{
 #' \item Package maintenance--no new features.
 #' \item move github figures to location CRAN understands.
+#' \item package initialization mumbo jumbo, see Rcpp issue 636.
 #' }
 #'
 #' @section \BWStest{} Version 0.2.0 (2016-04-29) :
