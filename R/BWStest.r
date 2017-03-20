@@ -64,7 +64,7 @@ NULL
 #' \newcommand{\cranBWStest}{\CRANpkg{BWStest}}
 #' \newcommand{\BWStest}{\href{https://github.com/shabbychef/BWStest}}
 #'
-#' @section \BWStest{} Version 0.2.1 (2017-03-19) :
+#' @section \BWStest{} Version 0.2.1 (2017-03-20) :
 #' \itemize{
 #' \item Package maintenance--no new features.
 #' \item move github figures to location CRAN understands.
