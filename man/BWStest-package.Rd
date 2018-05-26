@@ -28,9 +28,7 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
 }
-\author{
-Steven E. Pav \email{shabbychef@gmail.com}
-}
+
 \references{
 W. Baumgartner, P. Weiss, H. Schindler, 'A nonparametric test for the general two-sample problem', 
 Biometrics 54, no. 3 (Sep., 1998): pp. 1129-1135. 
@@ -58,5 +56,7 @@ H. Murakami, 'Lepage type statistic based on the modified Baumgartner statistic'
 Comp. Stat. & Data Analysis 51 (2007): pp 5061-5067. 
 \url{http://doai.io/10.1016/j.csda.2006.04.026}
 }
+\author{
+Steven E. Pav \email{shabbychef@gmail.com}
+}
 \keyword{package}
-

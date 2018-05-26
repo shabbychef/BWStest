@@ -7,7 +7,7 @@ Authors@R: c(person(c("Steven", "E."), "Pav",
 		comment = c(ORCID = "0000-0002-4197-6195")))
 Version: 0.2.1.0001
 Date: 2017-11-12
-License: LGPL-3
+License: License: LGPL-3
 Title: Baumgartner Weiss Schindler Test of Equal Distributions
 BugReports: https://github.com/shabbychef/BWStest/issues
 Description: Performs the 'Baumgartner-Weiss-Schindler' two-sample test of equal
@@ -15,14 +15,13 @@ Description: Performs the 'Baumgartner-Weiss-Schindler' two-sample test of equal
    similar rank-based tests for equal probability distributions due to
    Neuhauser <http://doai.io/10.1080/10485250108832874> and
    Murakami <http://doai.io/10.1080/00949655.2010.551516>.
-License: LGPL-3
 Imports:
     memoise,
     Rcpp (>= 0.12.3)
 LinkingTo: Rcpp
 Suggests:
     testthat
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 URL: https://github.com/shabbychef/BWStest
 Collate:
     'bws_test.r'

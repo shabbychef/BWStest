@@ -1,4 +1,8 @@
 
+2018-05-25 Steven E. Pav <shabbychef@gmail.com>
+* 0.2.2 on CRAN
+* adding ORCID to DESCRIPTION.
+
 2017-03-20 Steven E. Pav <shabbychef@gmail.com>
 * 0.2.1 on CRAN
 * move github figures to location CRAN understands.

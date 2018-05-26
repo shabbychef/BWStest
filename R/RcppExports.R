@@ -51,7 +51,7 @@
 #' @rdname bws_stat
 #' @export
 bws_stat <- function(x, y) {
-    .Call('BWStest_bws_stat', PACKAGE = 'BWStest', x, y)
+    .Call('_BWStest_bws_stat', PACKAGE = 'BWStest', x, y)
 }
 
 #' @title
@@ -110,7 +110,7 @@ bws_stat <- function(x, y) {
 #' @rdname bws_cdf
 #' @export
 bws_cdf <- function(b, maxj = 5L, lower_tail = TRUE) {
-    .Call('BWStest_bws_cdf', PACKAGE = 'BWStest', b, maxj, lower_tail)
+    .Call('_BWStest_bws_cdf', PACKAGE = 'BWStest', b, maxj, lower_tail)
 }
 
 #' @title
@@ -178,12 +178,12 @@ bws_cdf <- function(b, maxj = 5L, lower_tail = TRUE) {
 #' @rdname murakami_stat
 #' @export
 murakami_stat <- function(x, y, flavor = 0L) {
-    .Call('BWStest_murakami_stat', PACKAGE = 'BWStest', x, y, flavor)
+    .Call('_BWStest_murakami_stat', PACKAGE = 'BWStest', x, y, flavor)
 }
 
 #' @rdname murakami_stat
 #' @export
 murakami_stat_perms <- function(nx, ny, flavor = 0L) {
-    .Call('BWStest_murakami_stat_perms', PACKAGE = 'BWStest', nx, ny, flavor)
+    .Call('_BWStest_murakami_stat_perms', PACKAGE = 'BWStest', nx, ny, flavor)
 }
 

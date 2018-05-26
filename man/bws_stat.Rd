@@ -50,9 +50,6 @@ bval3 <- bws_stat(y,x)
 stopifnot(all.equal(bval,bval3))
 
 }
-\author{
-Steven E. Pav \email{shabbychef@gmail.com}
-}
 \references{
 W. Baumgartner, P. Weiss, H. Schindler, 'A nonparametric test for the general two-sample problem', 
 Biometrics 54, no. 3 (Sep., 1998): pp. 1129-1135. 
@@ -61,4 +58,6 @@ Biometrics 54, no. 3 (Sep., 1998): pp. 1129-1135.
 \seealso{
 \code{\link{bws_cdf}}, \code{\link{bws_test}}
 }
-
+\author{
+Steven E. Pav \email{shabbychef@gmail.com}
+}

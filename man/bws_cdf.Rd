@@ -57,9 +57,6 @@ pvals <- bws_cdf(bvals,lower_tail=TRUE)
 show(data.frame(B=bvals,BWS_psi=tab1v,our_psi=pvals))
 
 }
-\author{
-Steven E. Pav \email{shabbychef@gmail.com}
-}
 \references{
 W. Baumgartner, P. Weiss, H. Schindler, 'A nonparametric test for the general two-sample problem', 
 Biometrics 54, no. 3 (Sep., 1998): pp. 1129-1135. 
@@ -68,4 +65,6 @@ Biometrics 54, no. 3 (Sep., 1998): pp. 1129-1135.
 \seealso{
 \code{\link{bws_stat}}, \code{\link{bws_test}}
 }
-
+\author{
+Steven E. Pav \email{shabbychef@gmail.com}
+}

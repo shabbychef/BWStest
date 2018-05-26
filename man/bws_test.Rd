@@ -80,9 +80,6 @@ hval <- bws_test(x,y,alternative='two.sided')
 stopifnot(hval$p.value < 0.05)
 
 }
-\author{
-Steven E. Pav \email{shabbychef@gmail.com}
-}
 \references{
 W. Baumgartner, P. Weiss, H. Schindler, 'A nonparametric test for the general two-sample problem', 
 Biometrics 54, no. 3 (Sep., 1998): pp. 1129-1135. 
@@ -92,5 +89,7 @@ Biometrics 54, no. 3 (Sep., 1998): pp. 1129-1135.
 \code{\link{bws_test}}, \code{\link{bws_stat}},
 \code{\link{murakami_stat}}, \code{\link{murakami_cdf}}.
 }
+\author{
+Steven E. Pav \email{shabbychef@gmail.com}
+}
 \keyword{htest}
-

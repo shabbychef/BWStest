@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // bws_stat
 double bws_stat(NumericVector x, NumericVector y);
-RcppExport SEXP BWStest_bws_stat(SEXP xSEXP, SEXP ySEXP) {
+RcppExport SEXP _BWStest_bws_stat(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -19,7 +19,7 @@ END_RCPP
 }
 // bws_cdf
 NumericVector bws_cdf(NumericVector b, int maxj, bool lower_tail);
-RcppExport SEXP BWStest_bws_cdf(SEXP bSEXP, SEXP maxjSEXP, SEXP lower_tailSEXP) {
+RcppExport SEXP _BWStest_bws_cdf(SEXP bSEXP, SEXP maxjSEXP, SEXP lower_tailSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -32,7 +32,7 @@ END_RCPP
 }
 // murakami_stat
 double murakami_stat(NumericVector x, NumericVector y, int flavor);
-RcppExport SEXP BWStest_murakami_stat(SEXP xSEXP, SEXP ySEXP, SEXP flavorSEXP) {
+RcppExport SEXP _BWStest_murakami_stat(SEXP xSEXP, SEXP ySEXP, SEXP flavorSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -45,7 +45,7 @@ END_RCPP
 }
 // murakami_stat_perms
 NumericVector murakami_stat_perms(int nx, int ny, int flavor);
-RcppExport SEXP BWStest_murakami_stat_perms(SEXP nxSEXP, SEXP nySEXP, SEXP flavorSEXP) {
+RcppExport SEXP _BWStest_murakami_stat_perms(SEXP nxSEXP, SEXP nySEXP, SEXP flavorSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;

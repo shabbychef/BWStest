@@ -72,9 +72,6 @@ lines(ecdf(repli),col='red')
 }
 
 }
-\author{
-Steven E. Pav \email{shabbychef@gmail.com}
-}
 \references{
 W. Baumgartner, P. Weiss, H. Schindler, 'A nonparametric test for the general two-sample problem', 
 Biometrics 54, no. 3 (Sep., 1998): pp. 1129-1135. 
@@ -105,4 +102,6 @@ Comp. Stat. & Data Analysis 51 (2007): pp 5061-5067.
 \seealso{
 \code{\link{bws_stat}}.
 }
-
+\author{
+Steven E. Pav \email{shabbychef@gmail.com}
+}

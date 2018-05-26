@@ -9,7 +9,7 @@
 
 VMAJOR 						 = 0
 VMINOR 						 = 2
-VPATCH  					 = 1
+VPATCH  					 = 2
 #VDEV 							 = 
 VDEV 							 = .0001
 PKG_NAME 					:= BWStest
