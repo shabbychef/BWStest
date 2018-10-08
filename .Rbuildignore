@@ -26,3 +26,8 @@ LICENSE
 ^.drat_*
 ^.check_tmp
 rpkg_make
+libs
+nohup.out
+Rd2.pdf
+.Rd2pdf*
+submodule_directions.sh
