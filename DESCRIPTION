@@ -7,7 +7,7 @@ Authors@R: c(person(c("Steven", "E."), "Pav",
 		comment = c(ORCID = "0000-0002-4197-6195")))
 Version: 0.2.2
 Date: 2018-10-07
-License: License: LGPL-3
+License: LGPL-3
 Title: Baumgartner Weiss Schindler Test of Equal Distributions
 BugReports: https://github.com/shabbychef/BWStest/issues
 Description: Performs the 'Baumgartner-Weiss-Schindler' two-sample test of equal
@@ -21,7 +21,7 @@ Imports:
 LinkingTo: Rcpp
 Suggests:
     testthat
-RoxygenNote: 6.0.1
+RoxygenNote: 5.0.1
 URL: https://github.com/shabbychef/BWStest
 Collate:
     'bws_test.r'

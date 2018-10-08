@@ -19,7 +19,6 @@ Description: Performs the 'Baumgartner-Weiss-Schindler' two-sample test of equal
    similar rank-based tests for equal probability distributions due to
    Neuhauser <http://doai.io/10.1080/10485250108832874> and
    Murakami <http://doai.io/10.1080/00949655.2010.551516>.
-License: LGPL-3
 Imports:
     memoise,
     Rcpp (>= 0.12.3)
