@@ -64,7 +64,7 @@ NULL
 #' \newcommand{\cranBWStest}{\CRANpkg{BWStest}}
 #' \newcommand{\BWStest}{\href{https://github.com/shabbychef/BWStest}}
 #'
-#' @section \BWStest{} Version 0.2.2 (2018-10-07) :
+#' @section \BWStest{} Version 0.2.2 (2018-10-17) :
 #' \itemize{
 #' \item Package maintenance--no new features.
 #' }

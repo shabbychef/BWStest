@@ -15,10 +15,10 @@ License: LGPL-3
 Title: Baumgartner Weiss Schindler Test of Equal Distributions
 BugReports: https://github.com/shabbychef/PKG_NAME()/issues
 Description: Performs the 'Baumgartner-Weiss-Schindler' two-sample test of equal
-   probability distributions, <http://doai.io/10.2307/2533862>. Also performs
+   probability distributions, <doi:10.2307/2533862>. Also performs
    similar rank-based tests for equal probability distributions due to
-   Neuhauser <http://doai.io/10.1080/10485250108832874> and
-   Murakami <http://doai.io/10.1080/00949655.2010.551516>.
+   Neuhauser <doi:10.1080/10485250108832874> and
+   Murakami <doi:10.1080/00949655.2010.551516>.
 Imports:
     memoise,
     Rcpp (>= 0.12.3)
