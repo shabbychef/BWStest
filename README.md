@@ -36,7 +36,15 @@ if (require(devtools)) {
 }
 ```
 
-# Basic Usage
+## What is it?
+
+The Baumgartner-Weiß-Schindler ('BWS') test is a non-parametric hypothesis test for the null of
+equal probability distributions of two samples, not unlike the two-sample
+Kolmogorov-Smirnov test or the Wilcoxon test. 
+The BWS test is more powerful than these other tests under certain
+alternatives, as shown in the original paper and replicated below.
+
+## Basic Usage
 
 The front end for the hypothesis test is the function `bws_test`. By default it supports
 the the classical Baumgartner-Weiß-Schindler test for a two-sided alternative, returning a `htest` object:

@@ -4,8 +4,8 @@
 \alias{bws_test}
 \title{Perform the Baumgartner-Weiss-Schindler hypothesis test.}
 \usage{
-bws_test(x, y, method = c("default", "BWS", "Neuhauser", "B1", "B2", "B3",
-  "B4", "B5"), alternative = c("two.sided", "greater", "less"))
+bws_test(x, y, method = c("default", "BWS", "Neuhauser", "B1", "B2",
+  "B3", "B4", "B5"), alternative = c("two.sided", "greater", "less"))
 }
 \arguments{
 \item{x}{a vector of the first sample.}

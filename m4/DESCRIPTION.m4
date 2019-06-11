@@ -25,7 +25,7 @@ Imports:
 LinkingTo: Rcpp
 Suggests:
     testthat
-RoxygenNote: 5.0.1
+RoxygenNote: 6.1.1
 URL: https://github.com/shabbychef/PKG_NAME()
 dnl VignetteBuilder: knitr
 Collate:
