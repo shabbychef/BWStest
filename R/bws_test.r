@@ -23,7 +23,7 @@
 #' Perform the Baumgartner-Weiss-Schindler hypothesis test.
 #'
 #' @param x a vector of the first sample.
-#' @param y a vector of the first sample.
+#' @param y a vector of the second sample.
 #' @param method a character string specifying the test statistic to use.
 #' should be one of the following:
 #' \describe{

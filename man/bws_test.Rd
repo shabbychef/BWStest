@@ -10,7 +10,7 @@ bws_test(x, y, method = c("default", "BWS", "Neuhauser", "B1", "B2",
 \arguments{
 \item{x}{a vector of the first sample.}
 
-\item{y}{a vector of the first sample.}
+\item{y}{a vector of the second sample.}
 
 \item{method}{a character string specifying the test statistic to use.
 should be one of the following:
