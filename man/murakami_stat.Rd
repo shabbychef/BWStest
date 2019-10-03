@@ -59,7 +59,7 @@ x <- runif(1000)
 y <- runif(100)
 bval <- murakami_stat(x,y,1)
 
-\dontrun{
+\donttest{
 nx <- 6
 ny <- 5
 # monte carlo

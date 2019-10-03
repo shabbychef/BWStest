@@ -171,7 +171,7 @@ double gamrat(double j) {
 //' bvals <- replicate(500, bws_stat(rnorm(50),rnorm(50)))
 //' pvals <- bws_cdf(bvals)
 //' # these should be uniform!
-//' \dontrun{ 
+//' \donttest{ 
 //'   plot(ecdf(pvals)) 
 //' }
 //' 

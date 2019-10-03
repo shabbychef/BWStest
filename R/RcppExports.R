@@ -95,7 +95,7 @@ bws_stat <- function(x, y) {
 #' bvals <- replicate(500, bws_stat(rnorm(50),rnorm(50)))
 #' pvals <- bws_cdf(bvals)
 #' # these should be uniform!
-#' \dontrun{ 
+#' \donttest{ 
 #'   plot(ecdf(pvals)) 
 #' }
 #' 
@@ -160,7 +160,7 @@ bws_cdf <- function(b, maxj = 5L, lower_tail = TRUE) {
 #' y <- runif(100)
 #' bval <- murakami_stat(x,y,1)
 #'
-#' \dontrun{
+#' \donttest{
 #' nx <- 6
 #' ny <- 5
 #' # monte carlo

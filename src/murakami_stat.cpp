@@ -233,7 +233,7 @@ NumericVector murakami_many_B(const int N,const int nx,int flavor) {
 //' y <- runif(100)
 //' bval <- murakami_stat(x,y,1)
 //'
-//' \dontrun{
+//' \donttest{
 //' nx <- 6
 //' ny <- 5
 //' # monte carlo

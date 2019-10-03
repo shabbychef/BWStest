@@ -46,7 +46,7 @@ zv <- bws_cdf(xv)
 lines(xv,zv,col='red')
 
 # check under the null:
-\dontrun{
+\donttest{
 flavor <- 1L
 n1 <- 8
 n2 <- 8
