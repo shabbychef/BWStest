@@ -2,7 +2,7 @@
 
 # BWStest
 
-[![Build Status](https://travis-ci.org/shabbychef/BWStest.png)](https://travis-ci.org/shabbychef/BWStest)
+[![Build Status](https://github.com/shabbychef/BWStest/workflows/R-CMD-check/badge.svg)](https://github.com/shabbychef/BWStest/actions)
 [![codecov.io](http://codecov.io/github/shabbychef/BWStest/coverage.svg?branch=master)](http://codecov.io/github/shabbychef/BWStest?branch=master)
 [![CRAN](http://www.r-pkg.org/badges/version/BWStest)](https://cran.r-project.org/package=BWStest)
 [![Downloads](http://cranlogs.r-pkg.org/badges/BWStest?color=green)](http://www.r-pkg.org/pkg/BWStest)

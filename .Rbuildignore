@@ -31,3 +31,4 @@ nohup.out
 Rd2.pdf
 .Rd2pdf*
 submodule_directions.sh
+^\.github$
