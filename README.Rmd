@@ -51,7 +51,7 @@ library(microbenchmark)
 [![Total](http://cranlogs.r-pkg.org/badges/grand-total/BWStest?color=green)](http://www.r-pkg.org/pkg/BWStest)
 ![RCpp](https://img.shields.io/badge/RCpp-inside-blue.svg)
 
-Performs the [Baumgartner-Weiß-Schindler 2-sample test](http://doai.io/10.2307/2533862) of equal probability
+Performs the [Baumgartner-Weiß-Schindler 2-sample test](https://doi.org/10.2307/2533862) of equal probability
 distributions. 
 
 -- Steven E. Pav, shabbychef@gmail.com
@@ -345,8 +345,8 @@ print(ph)
 
 ## Murakami tests
 
-[Neuhäuser](http://doai.io/10.1007/BF02762032) and 
-[Murakami](http://doai.io/10.1080/00949655.2010.551516) described
+[Neuhäuser](https://doi.org/10.1007/BF02762032) and 
+[Murakami](https://doi.org/10.1080/00949655.2010.551516) described
 some modifications to the original test of Baumgartner. Neuhäuser's
 test allows one to test against directional alternatives. Murakami
 enumerated some modifications to the weighting scheme. These are

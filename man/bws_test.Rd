@@ -4,8 +4,12 @@
 \alias{bws_test}
 \title{Perform the Baumgartner-Weiss-Schindler hypothesis test.}
 \usage{
-bws_test(x, y, method = c("default", "BWS", "Neuhauser", "B1", "B2",
-  "B3", "B4", "B5"), alternative = c("two.sided", "greater", "less"))
+bws_test(
+  x,
+  y,
+  method = c("default", "BWS", "Neuhauser", "B1", "B2", "B3", "B4", "B5"),
+  alternative = c("two.sided", "greater", "less")
+)
 }
 \arguments{
 \item{x}{a vector of the first sample.}
@@ -83,7 +87,7 @@ stopifnot(hval$p.value < 0.05)
 \references{
 W. Baumgartner, P. Weiss, H. Schindler, 'A nonparametric test for the general two-sample problem', 
 Biometrics 54, no. 3 (Sep., 1998): pp. 1129-1135. 
-\url{http://doai.io/10.2307/2533862}
+\url{https://doi.org/10.2307/2533862}
 }
 \seealso{
 \code{\link{bws_test}}, \code{\link{bws_stat}},

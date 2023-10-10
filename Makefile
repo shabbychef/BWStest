@@ -9,9 +9,9 @@
 
 VMAJOR 						 = 0
 VMINOR 						 = 2
-VPATCH  					 = 2
-#VDEV 							 = 
-VDEV 							 = .0001
+VPATCH  					 = 3
+VDEV 							 = 
+#VDEV 							 = .0001
 PKG_NAME 					:= BWStest
 
 RPKG_USES_RCPP 		:= 1
