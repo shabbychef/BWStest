@@ -3,10 +3,10 @@
 # BWStest
 
 [![Build Status](https://github.com/shabbychef/BWStest/workflows/R-CMD-check/badge.svg)](https://github.com/shabbychef/BWStest/actions)
-[![codecov.io](http://codecov.io/github/shabbychef/BWStest/coverage.svg?branch=master)](http://codecov.io/github/shabbychef/BWStest?branch=master)
-[![CRAN](http://www.r-pkg.org/badges/version/BWStest)](https://cran.r-project.org/package=BWStest)
-[![Downloads](http://cranlogs.r-pkg.org/badges/BWStest?color=green)](http://www.r-pkg.org/pkg/BWStest)
-[![Total](http://cranlogs.r-pkg.org/badges/grand-total/BWStest?color=green)](http://www.r-pkg.org/pkg/BWStest)
+[![codecov.io](http://codecov.io/github/shabbychef/BWStest/coverage.svg?branch=master)](https://app.codecov.io/github/shabbychef/BWStest?branch=master)
+[![CRAN](https://www.r-pkg.org/badges/version/BWStest)](https://cran.r-project.org/package=BWStest)
+[![Downloads](http://cranlogs.r-pkg.org/badges/BWStest?color=green)](https://www.r-pkg.org:443/pkg/BWStest)
+[![Total](http://cranlogs.r-pkg.org/badges/grand-total/BWStest?color=green)](https://www.r-pkg.org:443/pkg/BWStest)
 ![RCpp](https://img.shields.io/badge/RCpp-inside-blue.svg)
 
 Performs the [Baumgartner-Weiß-Schindler 2-sample test](https://doi.org/10.2307/2533862) of equal probability
